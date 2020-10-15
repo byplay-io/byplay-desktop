@@ -22,14 +22,14 @@ export default class FFMPEGWrapper {
     )
   }
 
-  async extract(videoPath: string, framesPath: string, onProgress: (progressPerc: number) => void) {
+  async extract(videoPath: string, framesPath: string, onProgress: (processedFrames: number) => void) {
     return new Promise(resolve => {
       Ffmpeg(videoPath)
         .addOption("-vsync 0")
         .addOutput(framesPath)
         .on('end', resolve)
         .on('progress', function(progress) {
-          onProgress(progress.percent)
+          onProgress(progress.frames || 0)
         })
         .run()
     })

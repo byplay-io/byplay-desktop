@@ -52,18 +52,28 @@ export default class RecordingLocalManager {
     let videoPath = join(this.path, "src_video.mp4")
     let framesPath = join(this.path, "frames", "%05d.png")
     let ffmpegPath = this.store.getState().ffmpeg.path!
+    let totalFrames = this.getFramesNumber()
     await new FFMPEGWrapper(ffmpegPath).extract(
       videoPath,
       framesPath,
-        progressPerc => this.store.dispatch(
-          setRecordingStatusExtracting(this.recordingId, `${Math.round(progressPerc)}%`)
+      processedFrames => {
+        let percent = Math.round(100.0 * processedFrames / totalFrames)
+        this.store.dispatch(
+          setRecordingStatusExtracting(this.recordingId, `${percent}%`)
         )
+      }
     )
 
     let extractedFlagPath = join(this.path, ".extracted")
     await fs.promises.writeFile(extractedFlagPath, "-")
 
     this.store.dispatch(setRecordingStatusExtracted(this.recordingId))
+  }
+
+  private getFramesNumber() {
+    return this.store.getState().recordingsList!.recordings!.find(
+      rec => rec.id == this.recordingId
+    )!.recordingManifest!.framesCount
   }
 
   private async download() {

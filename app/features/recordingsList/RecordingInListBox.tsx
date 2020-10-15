@@ -95,7 +95,7 @@ const RecordingInfoBox = (props: {recording: IRecording}) => {
   </Flex>
 }
 
-type RecordingCallback = (recordingId: string) => void
+type RecordingCallback = (recording: string) => void
 
 const RecordingInListBox = (
   props: {
