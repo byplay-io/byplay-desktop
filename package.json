@@ -102,16 +102,7 @@
       "owner": "electron-react-boilerplate",
       "repo": "electron-react-boilerplate",
       "private": false
-    },
-    "extraFiles": [
-      {
-        "from": "build/mac/bin",
-        "to": "Resources/bin",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ]
+    }
   },
   "repository": {
     "type": "git",

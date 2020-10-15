@@ -10,7 +10,7 @@ import {
 import RecordingLocalManager from '../../backend/RecordingLocalManager';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
 import RecordingInListBox from './RecordingInListBox';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Box, Button, Flex } from 'rebass';
 import { PageContent } from '../../containers/PageContent';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 

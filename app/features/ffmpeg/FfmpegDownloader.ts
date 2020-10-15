@@ -1,7 +1,8 @@
-import { getPlatform } from '../../binaries';
-import path from "path";
-import fs from "fs";
+import { getPlatform, Platform } from '../../binaries';
+import path from 'path';
+import fs from 'fs';
 import Downloader from '../../backend/Downloader';
+
 const { app } = require('electron').remote
 
 export default class FfmpegDownloader {
@@ -33,11 +34,11 @@ export default class FfmpegDownloader {
 
   getUrl() {
     switch (getPlatform()) {
-      case 'linux':
+      case Platform.LINUX:
         return "https://storage.googleapis.com/byplay-website/standalone/ffmpeg/linux/ffmpeg"
-      case 'mac':
+      case Platform.MAC:
         return "https://storage.googleapis.com/byplay-website/standalone/ffmpeg/mac/ffmpeg"
-      case 'win':
+      case Platform.WINDOWS:
         return "https://storage.googleapis.com/byplay-website/standalone/ffmpeg/win/ffmpeg.exe"
       default:
         throw "Unknown platform"
@@ -45,7 +46,7 @@ export default class FfmpegDownloader {
   }
 
   getBinaryName() {
-    if(getPlatform() == "win") {
+    if(getPlatform() == Platform.WINDOWS) {
       return "ffmpeg.exe"
     }
     return "ffmpeg"

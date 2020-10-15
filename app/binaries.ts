@@ -7,25 +7,25 @@ const isPackaged =
 
 import { platform } from 'os';
 
-enum Platform {
+export enum Platform {
   MAC = "mac",
   WINDOWS = "win",
   LINUX = "linux"
 }
 
-export function getPlatform() {
+export function getPlatform(): Platform {
   switch (platform()) {
     case 'aix':
     case 'freebsd':
     case 'linux':
     case 'openbsd':
     case 'android':
-      return 'linux';
+      return Platform.LINUX;
     case 'darwin':
     case 'sunos':
-      return 'mac';
+      return Platform.MAC;
     case 'win32':
-      return 'win';
+      return Platform.WINDOWS;
   }
   throw "Unknown platform"
 };

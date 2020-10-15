@@ -1,8 +1,9 @@
-import * as unzipper from 'unzipper'
-import * as fs from 'fs'
-import {promises} from 'fs'
+import * as unzipper from 'unzipper';
+import * as fs from 'fs';
+import { promises } from 'fs';
 import Downloader from '../backend/Downloader';
 import { IByplayPluginPaths } from './ByplayPluginPaths';
+import { getPlatform, Platform } from '../binaries';
 
 export default class ByplayPluginInstaller {
   paths: IByplayPluginPaths
@@ -46,7 +47,14 @@ export default class ByplayPluginInstaller {
     await promises.symlink(
       this.paths.installDir,
       this.paths.symlinkPath,
-      'dir'
+      this.symlinkType()
     )
+  }
+
+  private symlinkType() {
+    if(getPlatform() == Platform.WINDOWS) {
+      return 'junction'
+    }
+    return 'dir'
   }
 }
