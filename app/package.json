@@ -1,0 +1,20 @@
+{
+  "name": "byplay-desktop",
+  "productName": "Byplay Desktop",
+  "version": "1.0.0",
+  "description": "Desktop client for Byplay Camera, allowing you to download shot videos and import them into a VFX package",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Electron React Boilerplate Maintainers",
+    "email": "electronreactboilerplate@gmail.com",
+    "url": "https://github.com/electron-react-boilerplate"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../internals/scripts/BabelRegister.js ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fontsource-roboto-mono": "^3.0.3"
+  }
+}

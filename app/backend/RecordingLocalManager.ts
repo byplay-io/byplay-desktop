@@ -1,0 +1,118 @@
+import { setRecordingStatusDownloaded, setRecordingStatusDownloading,
+  setRecordingStatusExtracted,
+  setRecordingStatusExtracting } from '../features/recordingsList/recordingsListSlice';
+import { Store } from '../store';
+import ByplayAPIClient from './ByplayAPIClient';
+import Downloader from './Downloader';
+import { selectRecordingsDirPath } from '../features/recordingsDir/recordingsDirSlice';
+const {join, dirname} = require('path')
+import fs from "fs";
+import { formatBytesProgress } from '../utils/format';
+import FFMPEGWrapper from '../utils/FFMPEGWrapper';
+
+
+export default class RecordingLocalManager {
+  recordingId: string
+  path: string
+  store: Store
+
+  constructor(recordingId: string, store: Store) {
+    this.recordingId = recordingId
+    this.store = store
+    this.path = join(selectRecordingsDirPath(store.getState()), this.recordingId)
+  }
+
+  async start() {
+    await this.mkdirLocal("")
+    await this.download()
+    await this.extract()
+  }
+
+  async openDir() {
+    this.openItem(this.path)
+  }
+
+  async openInBlender() {
+    for(let f of await fs.promises.readdir(this.path)) {
+      if(f.endsWith(".blend")) {
+        this.openItem(join(this.path, f))
+        return
+      }
+    }
+  }
+
+  async openVideo() {
+    this.openItem(join(this.path, "src_video.mp4"))
+  }
+
+  private async extract() {
+    this.store.dispatch(setRecordingStatusExtracting(this.recordingId))
+
+    await this.mkdirLocal("frames")
+    let videoPath = join(this.path, "src_video.mp4")
+    let framesPath = join(this.path, "frames", "%05d.png")
+    let ffmpegPath = this.store.getState().ffmpeg.path!
+    await new FFMPEGWrapper(ffmpegPath).extract(
+      videoPath,
+      framesPath,
+        progressPerc => this.store.dispatch(
+          setRecordingStatusExtracting(this.recordingId, `${Math.round(progressPerc)}%`)
+        )
+    )
+
+    let extractedFlagPath = join(this.path, ".extracted")
+    await fs.promises.writeFile(extractedFlagPath, "-")
+
+    this.store.dispatch(setRecordingStatusExtracted(this.recordingId))
+  }
+
+  private async download() {
+    this.store.dispatch(setRecordingStatusDownloading(this.recordingId))
+    // total size??
+    let linksResponse = await ByplayAPIClient.instance.recordingLinks(this.recordingId)
+    let totalSize = 0
+    for(let {path, size} of linksResponse.response?.files!) {
+      totalSize += size
+      await this.mkdirLocal(dirname(path))
+    }
+
+    let totalDownloaded = 0
+    for(let {link, path, size} of linksResponse.response?.files!) {
+      let fullPath = join(this.path, path)
+      await Downloader.download(link, fullPath, (_fileSize, currDownloaded) => {
+        let currentlyDownloaded = totalDownloaded + currDownloaded
+        this.store.dispatch(
+          setRecordingStatusDownloading(
+            this.recordingId,
+            formatBytesProgress(totalSize, currentlyDownloaded)
+          )
+        )
+      })
+      totalDownloaded += size
+      this.store.dispatch(
+        setRecordingStatusDownloading(
+          this.recordingId,
+          formatBytesProgress(totalSize, totalDownloaded)
+        )
+      )
+    }
+
+    this.store.dispatch(setRecordingStatusDownloaded(this.recordingId))
+  }
+
+  private async mkdirLocal(dir: string) {
+    let parts = dir.split("/")
+    let currentPath = this.path
+    for(let p of parts) {
+      currentPath = join(currentPath, p)
+      if(!fs.existsSync(currentPath)) {
+        await fs.promises.mkdir(currentPath)
+      }
+    }
+  }
+
+  private openItem(path: string) {
+    const {shell} = require('electron')
+    shell.openItem(path)
+  }
+}

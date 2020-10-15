@@ -1,0 +1,9 @@
+{
+  "HOME": "/",
+  "RECORDINGS_LIST": "/recordings",
+  "PLUGINS": "/plugins",
+  "SETUP": "/setup",
+  "SUPPORT": "/support",
+  "SIGN_OUT": "/auth/sign_out",
+  "SIGN_IN": "/auth/sign_in"
+}
