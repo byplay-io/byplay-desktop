@@ -7,6 +7,7 @@ import { formatBytesProgress } from '../../utils/format';
 import { useDispatch } from 'react-redux';
 import { setFFMPEGPath } from './ffmpegSlice';
 import FFMPEGWrapper from '../../utils/FFMPEGWrapper';
+import Preferences from '../../Preferences';
 
 export default function FfmpegDownloadPage(props: {asMain: boolean}) {
   let [progress, setProgress] = useState("")
@@ -18,6 +19,7 @@ export default function FfmpegDownloadPage(props: {asMain: boolean}) {
     try {
       if (await (new FFMPEGWrapper(path).isWorking())) {
         dispatch(setFFMPEGPath(path))
+        new Preferences().set("ffmpegPath", path)
       }
     } catch (e) {
       setError(e.message)

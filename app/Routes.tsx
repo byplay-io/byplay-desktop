@@ -11,10 +11,12 @@ import NavigationMenu from './components/NavigationMenu';
 import { Box } from 'rebass';
 import SignOutContainer from './features/auth/SignOutContainer';
 import SupportPage from './containers/SupportPage';
+import PreferencesLoader from './components/PreferencesLoader';
 
 export default function Routes() {
   return (
     <App>
+      <PreferencesLoader />
       <NavigationMenu />
       <Box m={2}>
         <Switch>

@@ -5,7 +5,7 @@ import {
   selectRecordingsList,
   setRecordingsListFromServer,
   selectRecordingStatuses,
-  RecordingNotStartedStatus
+  RecordingNotStartedStatus, setRecordingStatusExtracted, setRecordingStatusAtLeastNotStarted
 } from './recordingsListSlice';
 import RecordingLocalManager from '../../backend/RecordingLocalManager';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
@@ -39,12 +39,27 @@ export default function RecordingsList() {
     new RecordingLocalManager(recId, store).openVideo()
   }
 
+  const checkStatus = (recId: string) => {
+    if(!statuses[recId]) {
+      console.log("checking", recId)
+      if (new RecordingLocalManager(recId, store).isExtracted()) {
+        dispatch(setRecordingStatusExtracted(recId))
+      } else {
+        dispatch(setRecordingStatusAtLeastNotStarted(recId))
+      }
+    }
+  }
+
   const reloadList = () => {
     setLoading(true)
 
     ByplayAPIClient.instance.recordingsList().then(
       rl => {
-        dispatch(setRecordingsListFromServer(rl.response!))
+        let recordings = rl.response!
+        dispatch(setRecordingsListFromServer(recordings))
+        for(let {id} of recordings.recordings) {
+          checkStatus(id)
+        }
         setLoading(false)
       }
     ).catch(e => {

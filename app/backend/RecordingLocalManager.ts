@@ -64,10 +64,17 @@ export default class RecordingLocalManager {
       }
     )
 
-    let extractedFlagPath = join(this.path, ".extracted")
-    await fs.promises.writeFile(extractedFlagPath, "-")
+    await fs.promises.writeFile(this.extractedFlagPath(), "-")
 
     this.store.dispatch(setRecordingStatusExtracted(this.recordingId))
+  }
+
+  isExtracted(): boolean {
+    return fs.existsSync(this.path)
+  }
+
+  private extractedFlagPath() {
+    return join(this.path, ".extracted")
   }
 
   private getFramesNumber() {

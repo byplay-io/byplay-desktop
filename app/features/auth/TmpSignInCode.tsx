@@ -5,10 +5,11 @@ import {
   setAccessToken,
   setTmpSignInCode
 } from './authSlice';
-import { Box, Flex, Heading, Text } from 'rebass';
+import { Box, Flex, Text } from 'rebass';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 import { colors } from '../../theme';
+import Preferences from '../../Preferences';
 
 function CountIndicator(props: {count: number}) {
   const scale = 10
@@ -63,6 +64,11 @@ export default function TmpSignInCode() {
     }
   }, [])
 
+  const rememberToken = (token: string) => {
+    dispatch(setAccessToken(token))
+    new Preferences().set("accessToken", token)
+  }
+
   useEffect(() => {
     async function checkTmpCode() {
       console.warn("checking tmp code", tmpSignInCode)
@@ -72,7 +78,7 @@ export default function TmpSignInCode() {
       let res = await ByplayAPIClient.instance.authCheckTmpSignInCode(tmpSignInCode.checkToken)
       setCount(count + 1)
       if(res.success && res.response.activated) {
-        dispatch(setAccessToken(res.response.access_token))
+        rememberToken(res.response.access_token)
       }
     }
     let interval = setInterval(checkTmpCode, 2000)

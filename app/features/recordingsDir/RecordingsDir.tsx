@@ -5,14 +5,13 @@ import {
   setRecordingsDirPath
 } from './recordingsDirSlice';
 import { Text, Box, Button, Flex, Heading, LinkProps } from 'rebass';
-import FFMPEGWrapper from '../../utils/FFMPEGWrapper';
 import { PageContent } from '../../containers/PageContent';
 import { colors } from '../../theme';
-import { Link } from 'react-router-dom';
 import routes from '../../constants/routes.json';
 import { Link as RouterLink } from 'react-router-dom'
 import { Link as RebassLink } from 'rebass'
 import { RootState } from '../../store';
+import Preferences from '../../Preferences';
 
 const NavLink = (props: {title: string, to: string, disabled?: boolean}) => {
   // @ts-ignore
@@ -42,12 +41,17 @@ export default function RecordingsDir() {
 
   const dispatch = useDispatch()
 
+  const rememberRecordingsDir = (dir: string) => {
+    dispatch(setRecordingsDirPath(dir))
+    new Preferences().set("recordingsDir", dir)
+  }
+
   const handleButtonClick = async () => {
     const { dialog } = require('electron').remote
 
     let value = await dialog.showOpenDialog({ properties: ['openDirectory'] })
     if(value && value.filePaths.length == 1) {
-      dispatch(setRecordingsDirPath(value.filePaths[0]))
+      rememberRecordingsDir(value.filePaths[0])
     }
   }
 

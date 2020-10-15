@@ -9,7 +9,7 @@ export interface RecordingsDirState {
 const recordingsDirSlice = createSlice({
   name: 'recordingsDir',
   initialState: {
-    recordingsDirPath: "/Users/vadim/projects/byplay/recordings"
+    recordingsDirPath: null
   } as RecordingsDirState,
   reducers: {
     setRecordingsDirPath: (state, action: PayloadAction<string>) => {

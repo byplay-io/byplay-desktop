@@ -104,6 +104,13 @@ const recordingsListSlice = createSlice({
         downloadState: ProcessState.DONE,
         extractState: ProcessState.DONE
       }
+    },
+
+    setRecordingStatusAtLeastNotStarted: (state, action: PayloadAction<string>) => {
+      if(state.statuses[action.payload]) {
+        return
+      }
+      state.statuses[action.payload] = RecordingNotStartedStatus
     }
   },
 });
@@ -112,6 +119,7 @@ export const {
   setRecordingsListFromServer,
   setRecordingStatusDownloading,
   setRecordingStatusExtracted,
+  setRecordingStatusAtLeastNotStarted,
   setRecordingStatusExtracting,
   setRecordingStatusDownloaded
 } = recordingsListSlice.actions;

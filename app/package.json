@@ -15,6 +15,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "electron-updater": "^4.3.5",
     "fontsource-roboto-mono": "^3.0.3"
   }
 }

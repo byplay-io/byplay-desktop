@@ -2,7 +2,7 @@ import path from "path";
 import { promises } from 'fs';
 import * as fs from 'fs';
 import { IByplayPluginPaths } from './ByplayPluginPaths';
-import { ffmpegPath } from '../binaries';
+import Preferences from '../Preferences';
 const { app } = require('electron').remote
 
 export interface IPackageInstallStatus {
@@ -101,15 +101,7 @@ export default class ByplayHoudiniPluginPackageInstaller {
       "recommends": "houdini_version >= '17.5.321'",
       "env": [
         { "BYPLAY_HOUDINI_PLUGIN_PATH": "{{BYPLAY_HOUDINI_PLUGIN_PATH}}" },
-        { "BYPLAY_FFMPEG_PATH": "{{BYPLAY_FFMPEG_PATH}}" },
-        { "BYPLAY_HOUDINI_PLUGIN_DATA_PATH": "{{BYPLAY_HOUDINI_PLUGIN_DATA_PATH}}" },
-        { "BYPLAY_SYSTEM_DATA_PATH": "$BYPLAY_HOUDINI_PLUGIN_PATH/data" },
-        {
-          "HOUDINI_PATH": {
-            "value": "$BYPLAY_HOUDINI_PLUGIN_PATH",
-            "method": "append"
-          }
-        },
+        { "BYPLAY_SYSTEM_DATA_PATH": "{{BYPLAY_SYSTEM_DATA_PATH}}" },
         {
           "PYTHONPATH": {
             "value": "$BYPLAY_HOUDINI_PLUGIN_PATH/python",
@@ -129,7 +121,13 @@ export default class ByplayHoudiniPluginPackageInstaller {
     const template = JSON.stringify(templateValue, null, 4)
 
     return template
-      .replaceAll("{{BYPLAY_HOUDINI_PLUGIN_PATH}}", this.paths.symlinkPath)
-      .replaceAll("{{BYPLAY_FFMPEG_PATH}}", ffmpegPath)
+      .replaceAll(
+        "{{BYPLAY_HOUDINI_PLUGIN_PATH}}",
+        this.paths.symlinkPath.replace(/\\/g, '/')
+      )
+      .replaceAll(
+        "{{BYPLAY_SYSTEM_DATA_PATH}}",
+        new Preferences().path.replace(/\\/g, '/')
+      )
   }
 }
