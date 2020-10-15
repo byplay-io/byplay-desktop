@@ -77,7 +77,10 @@ export default class ByplayHoudiniPluginPackageInstaller {
   }
 
   listAllHoudiniDirs() {
-    let windowsPaths = path.join(app.getPath('home'), 'houdini{HV}')
+    let windowsPaths = [
+      path.join(app.getPath('home'), 'houdini{HV}'),
+      path.join(app.getPath('home'), 'Documents', 'houdini{HV}'),
+    ]
     let macPaths = path.join(
       app.getPath('home'),
       'Library/Preferences/houdini/{HV}'
@@ -90,7 +93,7 @@ export default class ByplayHoudiniPluginPackageInstaller {
       windowsPaths,
       macPaths,
       linuxPaths
-    ].map(this.expandPathsWithVersions).flat()
+    ].flat().map(this.expandPathsWithVersions).flat()
   }
 
   makePackageJsonContent() {
