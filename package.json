@@ -1,7 +1,7 @@
 {
   "name": "byplay-desktop",
   "productName": "Byplay Desktop",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Desktop client for Byplay Camera, allowing you to download shot videos and import them into a VFX package",
   "scripts": {
     "pack": "electron-builder --dir",
@@ -66,6 +66,10 @@
       "main.prod.js.map",
       "package.json"
     ],
+    "afterSign": "electron-builder-notarize",
+    "mac": {
+      "hardenedRuntime": true
+    },
     "dmg": {
       "contents": [
         {
@@ -184,6 +188,7 @@
     "detect-port": "^1.3.0",
     "electron": "^8",
     "electron-builder": "^22.9.1",
+    "electron-builder-notarize": "^1.2.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-rebuild": "^1.10.0",
     "enzyme": "^3.11.0",
