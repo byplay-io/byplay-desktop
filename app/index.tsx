@@ -6,12 +6,19 @@ import './app.global.css';
 import Downloader from './backend/Downloader';
 import ByplayAPIClient from './backend/ByplayAPIClient';
 import { selectAccessToken } from './features/auth/authSlice';
+import { ipcRenderer } from "electron";
 
 const store = configuredStore();
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 
 Downloader.subscribeRenderer()
+
+ipcRenderer.on('appUpdater', (_event, eventType) => {
+  if(eventType == 'updateDowloaded') {
+    alert("An update has been downloaded. Restart the app to install it")
+  }
+})
 
 ByplayAPIClient.instance = new ByplayAPIClient(() => selectAccessToken(store.getState()))
 

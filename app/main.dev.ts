@@ -18,10 +18,13 @@ import MenuBuilder from './menu';
 import Downloader from './backend/Downloader';
 
 export default class AppUpdater {
-  constructor() {
+  constructor(sendMessage: (message: string) => void) {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.on('update-downloaded', (_info: any) => {
+      sendMessage("updateDowloaded")
+    });
   }
 }
 
@@ -100,7 +103,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  new AppUpdater((message => mainWindow?.webContents.send('appUpdater', message)));
 };
 
 /**
