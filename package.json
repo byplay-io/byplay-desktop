@@ -69,7 +69,9 @@
     "afterSign": "electron-builder-notarize",
     "mac": {
       "hardenedRuntime": true,
-      "entitlements": "./resources/entitlements.mac.inherit.plist"
+      "entitlements": "resources/entitlements.mac.inherit.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "provisioningProfile": "embedded.provisionprofile"
     },
     "dmg": {
       "contents": [
@@ -104,6 +106,7 @@
       "provider": "github",
       "owner": "byplay-io",
       "repo": "byplay-desktop",
+      "vPrefixedTagName": true,
       "private": false
     }
   },
