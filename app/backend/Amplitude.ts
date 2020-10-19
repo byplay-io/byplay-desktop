@@ -33,7 +33,11 @@ export enum AnalyticsUserEventType {
   RECORDING_EXTRACTED = "recording extracted",
 
   SUPPORT_PAGE_RENDERED = "support page rendered",
-  SIGN_OUT_CLICKED = "sign out clicked"
+  SIGN_OUT_CLICKED = "sign out clicked",
+
+  SUPPORT_OPEN_LOGS_CLICKED = "support page open logs clicked",
+  SUPPORT_OPEN_DOCS_CLICKED = "support page open docs clicked",
+  SUPPORT_WRITE_EMAIL_CLICKED = "support write email clicked",
 }
 
 export const Analytics = {

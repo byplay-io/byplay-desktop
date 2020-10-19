@@ -1,25 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PageContent } from './PageContent';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Box, Button, Link, Text } from 'rebass';
 import { Analytics, AnalyticsUserEventType } from '../backend/Amplitude';
-import { dirname } from 'path';
+
 const { app } = require('electron').remote
 const log = require('electron-log');
 
 export default function SupportPage() {
+  const openItem = (item: string, eventType: AnalyticsUserEventType) => {
+    Analytics.registerUserEvent(eventType)
+    require('electron').shell.openItem(item)
+  }
+  const openUrl = (url: string, eventType: AnalyticsUserEventType) => {
+    Analytics.registerUserEvent(eventType)
+    require('electron').shell.openExternal(url)
+  }
+
   useEffect(() => {
     Analytics.registerUserEvent(AnalyticsUserEventType.SUPPORT_PAGE_RENDERED)
   }, [])
 
-  const openLogs = () => {
-    const {shell} = require('electron')
-    shell.openItem(dirname(log.transports.file.getFile().path))
-  }
+  const openLogs = () => openItem(
+    log.transports.file.getFile().path,
+    AnalyticsUserEventType.SUPPORT_OPEN_LOGS_CLICKED
+  )
+  const openDocs = () => openUrl(
+    "https://byplay.io/docs",
+    AnalyticsUserEventType.SUPPORT_OPEN_DOCS_CLICKED
+  )
+  const writeMail = () => openUrl(
+    "mailto:hello@byplay.io",
+    AnalyticsUserEventType.SUPPORT_WRITE_EMAIL_CLICKED
+  )
 
   return <PageContent title={"Help & Support"}>
     <Text>
+      Check out the <Link onClick={openDocs}>docs section</Link> on the byplay.io website
+    </Text>
+
+
+    <Text my={3}>
       If you have any questions or are facing difficulties,<br />
-      email us at <a href={"mailto:hello@byplay.io"}>hello@byplay.io</a>
+      email us at <Link onClick={writeMail}>hello@byplay.io</Link>
     </Text>
 
     <Text color={"muted"} style={{position: "absolute", bottom: 10}}>
