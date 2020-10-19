@@ -1,8 +1,9 @@
-import path from "path";
+import path, { dirname, join } from 'path';
 import { promises } from 'fs';
 import * as fs from 'fs';
 import { IByplayPluginPaths } from './ByplayPluginPaths';
 import Preferences from '../Preferences';
+import log, { info } from "electron-log";
 const { app } = require('electron').remote
 
 export interface IPackageInstallStatus {
@@ -25,12 +26,12 @@ export default class ByplayHoudiniPluginPackageInstaller {
   async install(): Promise<IPackageInstallStatus> {
     let installedTo: string[] = []
     for(let dir of this.listAllHoudiniDirs()) {
-      console.log("Checking dir", dir)
+      info("Checking dir", dir)
       if(await this.isValidHoudiniDir(dir)) {
         let jsonPath = this.packageJsonPath(dir)
         await promises.writeFile(jsonPath, this.packageJsonContent)
         installedTo.push(dir)
-        console.log("Installed!")
+        info("Installed!")
       }
     }
     if(installedTo.length > 0) {
@@ -97,11 +98,15 @@ export default class ByplayHoudiniPluginPackageInstaller {
   }
 
   makePackageJsonContent() {
+    const pluginPath = this.paths.symlinkPath.replace(/\\/g, '/')
+    const dataPath = new Preferences().path.replace(/\\/g, '/')
+    const logPath = join(dirname(log.transports.file.getFile().path), "houdini-plugin.log")
     const templateValue = {
       "recommends": "houdini_version >= '17.5.321'",
       "env": [
-        { "BYPLAY_HOUDINI_PLUGIN_PATH": "{{BYPLAY_HOUDINI_PLUGIN_PATH}}" },
-        { "BYPLAY_SYSTEM_DATA_PATH": "{{BYPLAY_SYSTEM_DATA_PATH}}" },
+        { "BYPLAY_HOUDINI_PLUGIN_PATH": pluginPath },
+        { "BYPLAY_SYSTEM_DATA_PATH": dataPath },
+        { "BYPLAY_PLUGIN_LOG_PATH": logPath },
         {
           "PYTHONPATH": {
             "value": "$BYPLAY_HOUDINI_PLUGIN_PATH/python",
@@ -118,16 +123,6 @@ export default class ByplayHoudiniPluginPackageInstaller {
       "path": "$BYPLAY_HOUDINI_PLUGIN_PATH"
     }
 
-    const template = JSON.stringify(templateValue, null, 4)
-
-    return template
-      .replaceAll(
-        "{{BYPLAY_HOUDINI_PLUGIN_PATH}}",
-        this.paths.symlinkPath.replace(/\\/g, '/')
-      )
-      .replaceAll(
-        "{{BYPLAY_SYSTEM_DATA_PATH}}",
-        new Preferences().path.replace(/\\/g, '/')
-      )
+    return JSON.stringify(templateValue, null, 4)
   }
 }
