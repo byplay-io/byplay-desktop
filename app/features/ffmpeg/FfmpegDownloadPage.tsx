@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setFFMPEGPath } from './ffmpegSlice';
 import FFMPEGWrapper from '../../utils/FFMPEGWrapper';
 import Preferences from '../../Preferences';
+import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 
 export default function FfmpegDownloadPage(props: {asMain: boolean}) {
   let [progress, setProgress] = useState("")
@@ -19,9 +20,11 @@ export default function FfmpegDownloadPage(props: {asMain: boolean}) {
     try {
       if (await (new FFMPEGWrapper(path).isWorking())) {
         dispatch(setFFMPEGPath(path))
-        new Preferences().set("ffmpegPath", path)
+        Analytics.registerUserEvent(AnalyticsUserEventType.FFMPEG_FINISHED_DOWNLOADING)
+        await new Preferences().set("ffmpegPath", path)
       }
     } catch (e) {
+      Analytics.registerUserEvent(AnalyticsUserEventType.FFMPEG_FAILED_DOWNLOADING, {error: e.message})
       setError(e.message)
     }
   }
@@ -29,6 +32,8 @@ export default function FfmpegDownloadPage(props: {asMain: boolean}) {
   useEffect(() => {
     const onProgress = (total: number, downloaded: number) =>
       setProgress(formatBytesProgress(total, downloaded));
+
+    Analytics.registerUserEvent(AnalyticsUserEventType.FFMPEG_STARTED_DOWNLOADING)
     new FfmpegDownloader().download(onProgress).then(checkAndSetPath)
   }, []);
 

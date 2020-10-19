@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { selectIsAuthorized } from '../features/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { selectRecordingsDirPath } from '../features/recordingsDir/recordingsDirSlice';
@@ -6,19 +6,16 @@ import Auth from '../features/auth/Auth';
 import RecordingsDir from '../features/recordingsDir/RecordingsDir';
 import FfmpegDownloadPage from '../features/ffmpeg/FfmpegDownloadPage';
 import { selectFfmpegPath } from '../features/ffmpeg/ffmpegSlice';
-import { selectIsSetUp } from '../features/setup';
-import { Redirect } from 'react-router';
-import routes from '../constants/routes.json';
+import { Analytics, AnalyticsUserEventType } from '../backend/Amplitude';
 
 enum SetupState {
-  AUTH,
-  RECORDING_DIR,
-  FFMPEG,
-  DONE
+  AUTH = "AUTH",
+  RECORDING_DIR = "RECORDING_DIR",
+  FFMPEG = "FFMPEG",
+  DONE = "DONE"
 }
 
 export default function Setup(): JSX.Element {
-  let isSetUp = useSelector(selectIsSetUp)
   let isAuthorized = useSelector(selectIsAuthorized)
   let hasRecordingsDir = !!useSelector(selectRecordingsDirPath)
   let downloadedFfmpeg = !!useSelector(selectFfmpegPath)
@@ -36,6 +33,12 @@ export default function Setup(): JSX.Element {
       }
     }
   }
+
+  useEffect(() => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.SETUP_PAGE_RENDERED, {
+      state
+    })
+  }, [state])
 
   return (
     <div data-tid="container">

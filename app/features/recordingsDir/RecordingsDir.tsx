@@ -12,6 +12,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Link as RebassLink } from 'rebass'
 import { RootState } from '../../store';
 import Preferences from '../../Preferences';
+import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 
 const NavLink = (props: {title: string, to: string, disabled?: boolean}) => {
   // @ts-ignore
@@ -52,6 +53,7 @@ export default function RecordingsDir() {
     let value = await dialog.showOpenDialog({ properties: ['openDirectory'] })
     if(value && value.filePaths.length == 1) {
       rememberRecordingsDir(value.filePaths[0])
+      Analytics.registerUserEvent(AnalyticsUserEventType.RECORDINGS_DIR_SELECTED)
     }
   }
 

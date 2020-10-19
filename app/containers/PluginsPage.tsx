@@ -6,11 +6,14 @@ import ByplayHoudiniPluginPackageInstaller from '../plugins/ByplayHoudiniPluginP
 import { PageContent } from './PageContent';
 import { colors } from '../theme';
 import ActivityIndicator from '../utils/ActivityIndicator';
+import { Analytics, AnalyticsUserEventType } from '../backend/Amplitude';
 
 function PluginBox(props: {manifest: IByplayPluginManifest}) {
   const [logMessages, setLogMessages] = useState<string[]>([])
 
   const install = async () => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_INSTALL_CLICKED, props.manifest)
+
     let messages = []
     let houdiniPlugin = new ByplayPlugin(props.manifest)
     let installer = houdiniPlugin.makeInstaller()
@@ -18,10 +21,14 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
       if (!await installer.isInstalled()) {
         messages.push(`downloading to: '${houdiniPlugin.paths.installDir}'`)
         await installer.quietInstall()
+        Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_DOWNLOADED_EXTRACTED, props.manifest)
       } else {
         messages.push(`already downloaded to: '${houdiniPlugin.paths.installDir}'`)
+        Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_ALREADY_DOWNLOADED_EXTRACTED, props.manifest)
       }
       let installerResult = await new ByplayHoudiniPluginPackageInstaller(houdiniPlugin.paths).install()
+
+      Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_PACKAGE_INSTALLED, {...props.manifest, ...installerResult})
       if (installerResult.message) {
         messages.push(installerResult.message)
       }
@@ -32,6 +39,11 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
       setLogMessages(logMessages.concat(messages))
     } catch (e) {
       setLogMessages(logMessages.concat(messages))
+
+      Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_INSTALL_FAILED, {
+        ...props.manifest,
+        error: e.message
+      })
       throw e
     }
   }
@@ -64,6 +76,10 @@ export default function PluginsPage() {
   useEffect(() => {
     let registry = new PluginRegistry()
     registry.getManifests().then(setManifests)
+  }, [])
+
+  useEffect(() => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.PLUGINS_PAGE_OPENED)
   }, [])
 
   return <PageContent title={"Plugins"}>

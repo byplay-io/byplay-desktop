@@ -16,6 +16,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import Downloader from './backend/Downloader';
+import * as Sentry from "@sentry/electron";
+
+Sentry.init({ dsn: "https://e5767db8a9e24a48b46e23d0c5869613@o244219.ingest.sentry.io/5469203" });
 
 export default class AppUpdater {
   constructor(sendMessage: (message: string) => void) {

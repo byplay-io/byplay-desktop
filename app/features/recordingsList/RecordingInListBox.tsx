@@ -55,7 +55,7 @@ const RecordingExtractedActions = (
     <Button variant={"outline"} mr={2} onClick={() => props.openDir(recording.id)}>Open dir</Button>
     <Button variant={"outline"} mr={2} onClick={() => props.openVideo(recording.id)}>Open video</Button>
     <Button variant={"outline"} mr={2} onClick={() => props.openInBlender(recording.id)}>
-      Open in blender <img src={"https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"} alt={"blender"} height={15} />
+      Open in Blender <img src={"https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"} alt={"blender"} height={15} />
     </Button>
   </Box>
 }

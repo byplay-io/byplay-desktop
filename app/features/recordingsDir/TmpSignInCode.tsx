@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Box, Text } from 'rebass';
 import { selectTmpSignInCode, setAccessToken, setTmpSignInCode } from '../auth/authSlice';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
+import { info } from 'electron-log';
 
 export default function TmpSignInCode() {
   const dispatch = useDispatch()
   const [count, setCount] = useState(0)
 
   const tmpSignInCode = useSelector(selectTmpSignInCode)
-  console.log("tmpSignInCode: ", tmpSignInCode)
+  info("tmpSignInCode", tmpSignInCode)
 
   useEffect(() => {
     if(!tmpSignInCode) {

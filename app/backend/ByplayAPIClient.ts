@@ -1,4 +1,5 @@
 import { AxiosResponse, default as axios } from 'axios';
+import { info } from 'electron-log';
 import {
   IByplayAPIResponse,
   IByplayAPIResponseAuthTmpSignInCode,
@@ -39,7 +40,7 @@ export default class ByplayAPIClient {
       this.makeUrl(`auth/tmp_sign_in_code`),
       {}
     )
-    console.log("tmp sign in code resp", resp)
+    info("tmp sign in code resp", resp.data)
     return this.wrapSuccess(resp.data)
   }
 

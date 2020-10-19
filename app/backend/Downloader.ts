@@ -1,6 +1,7 @@
 import { ipcMain, ipcRenderer, WebContents } from 'electron';
 import fs from "fs";
 import { default as axios } from 'axios';
+import { info, silly, warn } from 'electron-log';
 
 type ProgressListener = (total: number, downloaded: number) => void
 export default class Downloader {
@@ -17,7 +18,7 @@ export default class Downloader {
     targetPath: string,
     onProgress: ProgressListener
   ): Promise<void> {
-    console.log("Downloading with stream", url, targetPath)
+    info("Downloading with stream", url, targetPath)
     let downloadId = `${Date.now()}_${Math.random()}`
 
     this.progressListeners[downloadId] = onProgress
@@ -32,11 +33,11 @@ export default class Downloader {
     ipcRenderer.on(this.channelDownloadFileProgress, (_event, downloadId, total, progress) => {
       let progressListener = this.progressListeners[downloadId]
       if(!progressListener) {
-        console.warn("received downloadFileProgress but didn't find the listener", downloadId)
+        warn("received downloadFileProgress but didn't find the listener", downloadId)
         return
       }
 
-      console.log("Invoking", downloadId, total, progress)
+      silly("Invoking", downloadId, total, progress)
 
       progressListener(total, progress)
     })
@@ -44,11 +45,11 @@ export default class Downloader {
     ipcRenderer.on(this.channelDownloadFileDone, (_event, downloadId, error) => {
       let promise = this.returnPromises[downloadId]
       if(!promise) {
-        console.warn("received downloadFileDone but didn't find the listener", downloadId)
+        warn("received downloadFileDone but didn't find the listener", downloadId)
         return
       }
 
-      console.log("Invoking DONE", downloadId, error)
+      info("Invoking DONE", downloadId, error)
       let [resolve, reject] = promise
 
       if(error) {
@@ -64,7 +65,7 @@ export default class Downloader {
 
   static subscribeMain(webContents: WebContents) {
     ipcMain.on(this.channelDownloadFileCommand, (_event, downloadId, url, targetPath) => {
-      console.log("received channelDownloadFileCommand", downloadId, url, targetPath)
+      info("received channelDownloadFileCommand", downloadId, url, targetPath)
 
       const writer = fs.createWriteStream(targetPath)
       let notifyProgressEveryMs = 1000
@@ -75,7 +76,7 @@ export default class Downloader {
         responseType: 'stream',
       }).then(response => {
         const totalLength = parseInt(response.headers['content-length'])
-        console.log("TOTAL LEN", totalLength)
+        info("TOTAL LEN", totalLength)
         let currentDownloaded = 0
         let lastNotificationAt = Date.now()
 

@@ -10,6 +10,8 @@ import ByplayAPIClient from '../../backend/ByplayAPIClient';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 import { colors } from '../../theme';
 import Preferences from '../../Preferences';
+import { info } from 'electron-log';
+import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 
 function CountIndicator(props: {count: number}) {
   const scale = 10
@@ -49,24 +51,28 @@ export default function TmpSignInCode() {
   const [count, setCount] = useState(0)
 
   const tmpSignInCode = useSelector(selectTmpSignInCode)
-  console.log("tmpSignInCode: ", tmpSignInCode)
 
   useEffect(() => {
     if(!tmpSignInCode || !tmpSignInCode.code) {
       ByplayAPIClient.instance.authCreateTmpSignInCode().then(
-        (tsc) => dispatch(
-          setTmpSignInCode({
-            code: tsc.response?.tmp_sign_in_code!,
-            checkToken: tsc.response?.check_token!
-          })
-        )
+        (tsc) => {
+          info("tmpSignInCode: ", tmpSignInCode)
+          dispatch(
+            setTmpSignInCode({
+              code: tsc.response?.tmp_sign_in_code!,
+              checkToken: tsc.response?.check_token!
+            })
+          )
+        }
       )
     }
   }, [])
 
-  const rememberToken = (token: string) => {
-    dispatch(setAccessToken(token))
-    new Preferences().set("accessToken", token)
+  const rememberToken = (accessToken: string, userId: string) => {
+    dispatch(setAccessToken(accessToken))
+    new Preferences().setBatch({accessToken, userId})
+    Analytics.registerUserEvent(AnalyticsUserEventType.TMP_SIGN_IN_TOKEN_ACTIVATED)
+    Analytics.setUserId(userId)
   }
 
   useEffect(() => {
@@ -78,14 +84,13 @@ export default function TmpSignInCode() {
       let res = await ByplayAPIClient.instance.authCheckTmpSignInCode(tmpSignInCode.checkToken)
       setCount(count + 1)
       if(res.success && res.response.activated) {
-        rememberToken(res.response.access_token)
+        rememberToken(res.response.access_token, res.response.user_id)
       }
     }
     let interval = setInterval(checkTmpCode, 2000)
     return () => clearInterval(interval)
   })
 
-  console.log(tmpSignInCode)
   return <Flex flexDirection={"row"} mt={4}>
     <Box width={500} mr={100}>
       <Box fontSize={1}>

@@ -4,6 +4,7 @@ import { promises } from 'fs';
 import Downloader from '../backend/Downloader';
 import { IByplayPluginPaths } from './ByplayPluginPaths';
 import { getPlatform, Platform } from '../binaries';
+import { info } from 'electron-log';
 
 export default class ByplayPluginInstaller {
   paths: IByplayPluginPaths
@@ -25,7 +26,7 @@ export default class ByplayPluginInstaller {
   }
 
   async quietInstall() {
-    await this.download(console.log)
+    await this.download(info)
     await this.extract()
     await this.createSymlink()
   }

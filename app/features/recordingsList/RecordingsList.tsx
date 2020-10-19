@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import {
+  RecordingNotStartedStatus,
   selectProcessingCount,
   selectRecordingsList,
-  setRecordingsListFromServer,
   selectRecordingStatuses,
-  RecordingNotStartedStatus, setRecordingStatusExtracted, setRecordingStatusAtLeastNotStarted
+  setRecordingsListFromServer,
+  setRecordingStatusAtLeastNotStarted,
+  setRecordingStatusExtracted
 } from './recordingsListSlice';
 import RecordingLocalManager from '../../backend/RecordingLocalManager';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
 import RecordingInListBox from './RecordingInListBox';
-import { Box, Button, Flex } from 'rebass';
+import { Box, Button, Flex, Text } from 'rebass';
 import { PageContent } from '../../containers/PageContent';
 import ActivityIndicator from '../../utils/ActivityIndicator';
+import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 
 export default function RecordingsList() {
   const processingCount = useSelector(selectProcessingCount)
@@ -23,29 +26,32 @@ export default function RecordingsList() {
   const dispatch = useDispatch()
   const store = useStore()
 
-  const setDownloading = (recId: string) => {
-    new RecordingLocalManager(recId, store).start()
+  const setDownloading = (recordingId: string) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_DOWNLOAD_CLICKED, { recordingId })
+    new RecordingLocalManager(recordingId, store).start()
   }
 
-  const openDir = (recId: string) => {
-    new RecordingLocalManager(recId, store).openDir()
+  const openDir = (recordingId: string) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_OPEN_DIR_CLICKED, { recordingId })
+    new RecordingLocalManager(recordingId, store).openDir()
   }
 
-  const openInBlender = (recId: string) => {
-    new RecordingLocalManager(recId, store).openInBlender()
+  const openInBlender = (recordingId: string) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_OPEN_BLENDER_CLICKED, { recordingId })
+    new RecordingLocalManager(recordingId, store).openInBlender()
   }
 
-  const openVideo = (recId: string) => {
-    new RecordingLocalManager(recId, store).openVideo()
+  const openVideo = (recordingId: string) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_OPEN_VIDEO_CLICKED, { recordingId })
+    new RecordingLocalManager(recordingId, store).openVideo()
   }
 
-  const checkStatus = (recId: string) => {
-    if(!statuses[recId]) {
-      console.log("checking", recId)
-      if (new RecordingLocalManager(recId, store).isExtracted()) {
-        dispatch(setRecordingStatusExtracted(recId))
+  const checkStatus = (recordingId: string) => {
+    if(!statuses[recordingId]) {
+      if (new RecordingLocalManager(recordingId, store).isExtracted()) {
+        dispatch(setRecordingStatusExtracted(recordingId))
       } else {
-        dispatch(setRecordingStatusAtLeastNotStarted(recId))
+        dispatch(setRecordingStatusAtLeastNotStarted(recordingId))
       }
     }
   }
@@ -69,11 +75,17 @@ export default function RecordingsList() {
   }
 
   useEffect(reloadList, [])
+  useEffect(() => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDINGS_PAGE_RENDERED)
+  }, [])
 
   return <PageContent title={"Your videos"}>
     {isLoading ? <ActivityIndicator /> : null}
     {processingCount ? <Box sx={{fontFamily: "monospace"}}>
       <h3>Processing: {processingCount}</h3>
+      <Text fontSize={1} color={"muted"}>
+        Some of your videos are still processing in our cloud. Usually it takes less than 2 minutes, depending on duration
+      </Text>
     </Box> : null}
     <Box my={3}>
       <Button variant={"outline"} onClick={reloadList} disabled={isLoading}>

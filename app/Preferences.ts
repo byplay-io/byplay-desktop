@@ -1,3 +1,4 @@
+import { info } from 'electron-log';
 import { promises } from 'fs';
 
 const { app } = require('electron').remote
@@ -5,16 +6,24 @@ const {join} = require('path')
 const fs = require('fs')
 
 export interface IPersistedPreferences {
+  firstLaunchAt: string | null,
   recordingsDir: string | null,
   accessToken: string | null,
-  ffmpegPath: string | null
+  ffmpegPath: string | null,
+  userId: string | null
 }
 
 const emptyPreferences: IPersistedPreferences = {
+  firstLaunchAt: null,
   recordingsDir: null,
   accessToken: null,
-  ffmpegPath: null
+  ffmpegPath: null,
+  userId: null
 }
+
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
 
 export default class Preferences {
   readonly path: string
@@ -23,12 +32,20 @@ export default class Preferences {
     this.path = join(app.getPath('userData'), "preferences.json")
   }
 
+  async clear() {
+    await this.setBatch(emptyPreferences)
+  }
+
   async set(keyName: keyof IPersistedPreferences, keyValue: string | null) {
+    await this.setBatch({[keyName]: keyValue})
+  }
+
+  async setBatch(data: Partial<IPersistedPreferences>) {
     let current = await this.read()
-    console.log("Current", current)
-    let newValue = { ...current, [keyName]: keyValue }
+    info("Current preferences", current)
+    let newValue: IPersistedPreferences = { ...current, ...data }
     let newContent = JSON.stringify(newValue)
-    console.log("storing preferences", newValue)
+    info("Storing preferences", newValue)
     await promises.writeFile(this.path, newContent, { encoding: "utf-8" })
   }
 
@@ -38,7 +55,7 @@ export default class Preferences {
     }
     let content = await promises.readFile(this.path, "utf-8")
     let parsed = JSON.parse(content)
-    console.log("parsed", parsed)
+    info("parsed", parsed)
     return {
       ...emptyPreferences,
       ...parsed

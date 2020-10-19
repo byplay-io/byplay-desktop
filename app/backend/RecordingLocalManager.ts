@@ -1,14 +1,19 @@
-import { setRecordingStatusDownloaded, setRecordingStatusDownloading,
+import {
+  setRecordingStatusDownloaded,
+  setRecordingStatusDownloading,
   setRecordingStatusExtracted,
-  setRecordingStatusExtracting } from '../features/recordingsList/recordingsListSlice';
+  setRecordingStatusExtracting
+} from '../features/recordingsList/recordingsListSlice';
 import { Store } from '../store';
 import ByplayAPIClient from './ByplayAPIClient';
 import Downloader from './Downloader';
 import { selectRecordingsDirPath } from '../features/recordingsDir/recordingsDirSlice';
-const {join, dirname} = require('path')
-import fs from "fs";
+import fs from 'fs';
 import { formatBytesProgress } from '../utils/format';
 import FFMPEGWrapper from '../utils/FFMPEGWrapper';
+import { Analytics, AnalyticsUserEventType } from './Amplitude';
+
+const {join, dirname} = require('path')
 
 
 export default class RecordingLocalManager {
@@ -25,7 +30,13 @@ export default class RecordingLocalManager {
   async start() {
     await this.mkdirLocal("")
     await this.download()
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_DOWNLOADED, {
+      recordingId: this.recordingId
+    })
     await this.extract()
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_EXTRACTED, {
+      recordingId: this.recordingId
+    })
   }
 
   async openDir() {
@@ -67,6 +78,7 @@ export default class RecordingLocalManager {
     await fs.promises.writeFile(this.extractedFlagPath(), "-")
 
     this.store.dispatch(setRecordingStatusExtracted(this.recordingId))
+
   }
 
   isExtracted(): boolean {
