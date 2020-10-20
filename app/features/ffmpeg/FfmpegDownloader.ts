@@ -1,4 +1,4 @@
-import { getPlatform, Platform } from '../../binaries';
+import { getPlatform, Platform } from '../../platformHelpers';
 import path from 'path';
 import fs from 'fs';
 import Downloader from '../../backend/Downloader';

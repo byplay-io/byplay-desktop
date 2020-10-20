@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { promises } from 'fs';
 import Downloader from '../backend/Downloader';
 import { IByplayPluginPaths } from './ByplayPluginPaths';
-import { getPlatform, Platform } from '../binaries';
+import { getPlatform, Platform } from '../platformHelpers';
 import { info } from 'electron-log';
 
 export default class ByplayPluginInstaller {

@@ -1,3 +1,6 @@
+const Sentry = require('@sentry/electron/dist/renderer')
+Sentry.init({ dsn: "https://e5767db8a9e24a48b46e23d0c5869613@o244219.ingest.sentry.io/5469203" });
+
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
@@ -8,9 +11,6 @@ import ByplayAPIClient from './backend/ByplayAPIClient';
 import { selectAccessToken } from './features/auth/authSlice';
 import { ipcRenderer } from 'electron';
 import { Analytics, AnalyticsUserEventType } from './backend/Amplitude';
-import * as Sentry from "@sentry/electron";
-
-Sentry.init({ dsn: "https://e5767db8a9e24a48b46e23d0c5869613@o244219.ingest.sentry.io/5469203" });
 
 const store = configuredStore();
 

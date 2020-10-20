@@ -1,7 +1,6 @@
 import { info } from 'electron-log';
 import { promises } from 'fs';
 
-const { app } = require('electron').remote
 const {join} = require('path')
 const fs = require('fs')
 
@@ -29,6 +28,7 @@ export default class Preferences {
   readonly path: string
 
   constructor() {
+    const { app } = require('electron').remote
     this.path = join(app.getPath('userData'), "preferences.json")
   }
 

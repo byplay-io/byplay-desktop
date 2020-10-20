@@ -1,7 +1,7 @@
 import amplitude from 'amplitude-js'
 import { info } from 'electron-log';
 import Preferences from '../Preferences';
-import { getPlatform } from '../binaries';
+import { getPlatform } from '../platformHelpers';
 
 export enum AnalyticsUserEventType {
   APP_LAUNCHED = "launched",
@@ -52,6 +52,7 @@ export const Analytics = {
     amplitude.getInstance().init("5e18757a01b9d84a19dfddb7f0835a28")
     amplitude.getInstance().options.platform = `Desktop ${getPlatform()}`
 
+    console.log("setting up amplitude")
     let preferences = new Preferences()
     let prefData = await preferences.read()
 

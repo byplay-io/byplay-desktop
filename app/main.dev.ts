@@ -8,6 +8,9 @@
  * When running `yarn build` or `yarn build-main`, this file is compiled to
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
+const Sentry = require('@sentry/electron/dist/main')
+Sentry.init({ dsn: "https://e5767db8a9e24a48b46e23d0c5869613@o244219.ingest.sentry.io/5469203" });
+
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
@@ -16,16 +19,19 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import Downloader from './backend/Downloader';
-import * as Sentry from "@sentry/electron";
+log.info("Main started...")
 
-Sentry.init({ dsn: "https://e5767db8a9e24a48b46e23d0c5869613@o244219.ingest.sentry.io/5469203" });
+
+log.info("Main sentry set up...")
 
 export default class AppUpdater {
   constructor(sendMessage: (message: string) => void) {
+    log.info("Creating AppUpdater")
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
     autoUpdater.on('update-downloaded', (_info: any) => {
+      log.info("sending updateDowloaded")
       sendMessage("updateDowloaded")
     });
   }
@@ -34,8 +40,10 @@ export default class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 
 if (process.env.NODE_ENV === 'production') {
+  log.info("installing sourceMapSupport")
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
+  log.info("installed sourceMapSupport")
 }
 
 if (
