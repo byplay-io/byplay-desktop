@@ -41,17 +41,10 @@ export enum AnalyticsUserEventType {
 }
 
 export const Analytics = {
-  currentAppVersion: "",
-
-  setVersion(version: string) {
-    this.currentAppVersion = version
-    amplitude.getInstance().setVersionName(version)
-  },
-
   async setup() {
     amplitude.getInstance().init("5e18757a01b9d84a19dfddb7f0835a28")
     amplitude.getInstance().options.platform = `Desktop ${getPlatform()}`
-
+    amplitude.getInstance().setVersionName(require('electron').remote.app.getVersion())
     console.log("setting up amplitude")
     let preferences = new Preferences()
     let prefData = await preferences.read()
