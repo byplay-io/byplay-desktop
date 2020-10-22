@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { PageContent } from './PageContent';
 import { Box, Button, Link, Text } from 'rebass';
 import { Analytics, AnalyticsUserEventType } from '../backend/Amplitude';
+import { dirname } from 'path';
 
 const { app } = require('electron').remote
 const log = require('electron-log');
@@ -21,7 +22,7 @@ export default function SupportPage() {
   }, [])
 
   const openLogs = () => openItem(
-    log.transports.file.getFile().path,
+    dirname(log.transports.file.getFile().path),
     AnalyticsUserEventType.SUPPORT_OPEN_LOGS_CLICKED
   )
   const openDocs = () => openUrl(

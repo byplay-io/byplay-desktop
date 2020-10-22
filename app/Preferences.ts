@@ -1,8 +1,9 @@
-import { info } from 'electron-log';
+import { info, error } from 'electron-log';
 import { promises } from 'fs';
 
 const {join} = require('path')
 const fs = require('fs')
+const Sentry = require('@sentry/electron/dist/renderer')
 
 export interface IPersistedPreferences {
   firstLaunchAt: string | null,
@@ -55,12 +56,18 @@ export default class Preferences {
     if(!fs.existsSync(this.path)) {
       return emptyPreferences
     }
-    let content = await promises.readFile(this.path, "utf-8")
-    let parsed = JSON.parse(content)
-    info("parsed", parsed)
-    return {
-      ...emptyPreferences,
-      ...parsed
-    } as IPersistedPreferences
+    try {
+      let content = await promises.readFile(this.path, "utf-8")
+      info("config content", content)
+      let parsed = JSON.parse(content)
+      return {
+        ...emptyPreferences,
+        ...parsed
+      } as IPersistedPreferences
+    } catch (e) {
+      Sentry.captureException(e)
+      error("Exception while reading config, falling back to empty")
+      return emptyPreferences
+    }
   }
 }
