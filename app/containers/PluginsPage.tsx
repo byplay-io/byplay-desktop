@@ -7,9 +7,18 @@ import { PageContent } from './PageContent';
 import { colors } from '../theme';
 import ActivityIndicator from '../utils/ActivityIndicator';
 import { Analytics, AnalyticsUserEventType } from '../backend/Amplitude';
+import Preferences from '../Preferences';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectInstalledHoudiniPluginVersion,
+  setInstalledHoudiniPluginVersion
+} from '../features/plugins/pluginsSlice';
 
 function PluginBox(props: {manifest: IByplayPluginManifest}) {
   const [logMessages, setLogMessages] = useState<string[]>([])
+  const dispatch = useDispatch()
+  const version = props.manifest.buildNumber.toString()
+  const installedVersion = useSelector(selectInstalledHoudiniPluginVersion)
 
   const install = async () => {
     Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_INSTALL_CLICKED, props.manifest)
@@ -31,6 +40,10 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
       Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_PACKAGE_INSTALLED, {...props.manifest, ...installerResult})
       if (installerResult.message) {
         messages.push(installerResult.message)
+      }
+      if (installerResult.success) {
+        new Preferences().set('houdiniPluginVersion', version)
+        dispatch(setInstalledHoudiniPluginVersion(version))
       }
       if (installerResult.openDir) {
         const { shell } = require('electron')
@@ -55,9 +68,14 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
     <Text>
       Version: {props.manifest.buildNumber}
     </Text>
+    { installedVersion && installedVersion !== version ?
+      <Flex my={2} style={{borderColor: colors.danger, borderWidth: 1, borderStyle: "solid"}} p={2}>
+        <Text>You have and older version installed: {installedVersion}</Text>
+      </Flex>
+      : null}
     <Box my={2}>
       <Button variant={"outline"} onClick={install}>
-        Install
+        {installedVersion == version ? "Reinstall" : "Install"}
       </Button>
     </Box>
     { logMessages.length > 0 ?

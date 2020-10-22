@@ -9,7 +9,8 @@ export interface IPersistedPreferences {
   recordingsDir: string | null,
   accessToken: string | null,
   ffmpegPath: string | null,
-  userId: string | null
+  userId: string | null,
+  houdiniPluginVersion: string | null
 }
 
 const emptyPreferences: IPersistedPreferences = {
@@ -17,7 +18,8 @@ const emptyPreferences: IPersistedPreferences = {
   recordingsDir: null,
   accessToken: null,
   ffmpegPath: null,
-  userId: null
+  userId: null,
+  houdiniPluginVersion: null
 }
 
 type Partial<T> = {
