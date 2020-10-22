@@ -50,9 +50,12 @@ const recordingsListSlice = createSlice({
   } as RecordingsListState,
   reducers: {
     setRecordingsListFromServer: (state, action: PayloadAction<IRecordingsListResponse>) => {
-      state.recordings = action.payload.recordings.sort(
-        (a, b) => a.recordingManifest.createdAtTimestamp - b.recordingManifest.createdAtTimestamp
+      let recs = ([] as IRecording[]).concat(action.payload.recordings)
+      recs.sort(
+        (a, b) =>
+          b.recordingManifest.createdAtTimestamp - a.recordingManifest.createdAtTimestamp
       )
+      state.recordings = recs
       state.processingCount = action.payload.processing_count
     },
 

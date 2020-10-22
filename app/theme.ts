@@ -4,6 +4,7 @@ export const colors = {
   brightMuted: "#555500",
   secondary: "#ff00ff",
   primary: "#00ffff",
+  danger: "#ff0000",
   secondaryMuted: "#800080",
   textMuted: "#c7c7c7",
   primaryFgDisabled: "rgb(66,66,66)",
@@ -13,7 +14,6 @@ export const colors = {
   primaryBgTransparentMore: "rgba(28,16,24,0.3)",
   success:   "#00ff00",
   successMuted:   "#00c700",
-  danger:    "#9A031E",
 }// default theme preset
 
 export default {
@@ -24,6 +24,7 @@ export default {
     secondary: colors.secondary,
     muted: colors.textMuted,
     gray: '#dddddf',
+    danger: colors.danger,
     success: colors.success,
     successMuted: colors.successMuted,
     highlight: colors.bright,
