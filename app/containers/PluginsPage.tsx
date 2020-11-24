@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Image, Link, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import PluginRegistry from '../plugins/PluginRegistry';
 import ByplayPlugin, { IByplayPluginManifest } from '../plugins/ByplayPlugin';
 import ByplayHoudiniPluginPackageInstaller from '../plugins/ByplayHoudiniPluginPackageInstaller';
@@ -21,6 +21,7 @@ import ByplayPluginPackageInstaller from '../plugins/ByplayPluginPackageInstalle
 import ByplayBlenderPluginPackageInstaller from '../plugins/ByplayBlenderPluginPackageInstaller';
 import routes from '../constants/routes.json';
 import NavLink from '../utils/NavLink';
+import ExternalURLLink from '../utils/ExternalURLLink';
 
 interface IPluginStateOps {
   setInstalledVersion: (version: string) => Action,
@@ -62,9 +63,7 @@ function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: st
     </video>
   }
   if(props.manifest.id == "byplay-blender") {
-    return <video autoPlay muted controls>
-      <source src={"https://storage.googleapis.com/byplay-website/standalone/blender_plugin_demo.mov"}/>
-    </video>
+    return <Box>Go to <ExternalURLLink href={"https://byplay.io/docs/blender"}>https://byplay.io/docs/blender</ExternalURLLink> to learn about the Blender plugin</Box>
   }
   return null
 }
@@ -81,6 +80,7 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
   const openDirForManual = async () => {
     let plugin = new ByplayPlugin(props.manifest)
     const dir = await pluginOps.packageInstallerFn(plugin).openDirForManual()
+    Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_MANUAL_INSTALL_CLICKED, props.manifest)
     require('electron').shell.openItem(dir)
   }
 
@@ -221,7 +221,7 @@ export default function PluginsPage() {
         </Flex>
         <Text>
           In every video folder you can find "ae_scene.jsx". In AE: "File - Scripts - Run Script File", then choose ae_scene.jsx <br />
-          See the <Link href={"https://www.youtube.com/watch?v=SfjIaYS8ChE"}>one-minute tutorial</Link>
+          See the <ExternalURLLink href={"https://www.youtube.com/watch?v=SfjIaYS8ChE"}>one-minute tutorial</ExternalURLLink>
         </Text>
       </Box>
       <Box my={3}>

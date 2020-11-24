@@ -19,6 +19,7 @@ export enum AnalyticsUserEventType {
 
   PLUGINS_PAGE_OPENED = "plugins page opened",
   PLUGIN_INSTALL_CLICKED = "plugin install clicked",
+  PLUGIN_MANUAL_INSTALL_CLICKED = "plugin manual install clicked",
   PLUGIN_INSTALL_FAILED = "plugin install failed",
   PLUGIN_DOWNLOADED_EXTRACTED = "plugin downloaded extracted",
   PLUGIN_ALREADY_DOWNLOADED_EXTRACTED = "plugin already downloaded extracted",
@@ -34,6 +35,7 @@ export enum AnalyticsUserEventType {
 
   SUPPORT_PAGE_RENDERED = "support page rendered",
   SIGN_OUT_CLICKED = "sign out clicked",
+  EXTERNAL_URL_LINK_CLICKED = "external url link clicked",
 
   SUPPORT_OPEN_LOGS_CLICKED = "support page open logs clicked",
   SUPPORT_OPEN_DOCS_CLICKED = "support page open docs clicked",
