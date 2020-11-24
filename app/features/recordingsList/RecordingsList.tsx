@@ -16,6 +16,8 @@ import { Box, Button, Flex, Text } from 'rebass';
 import { PageContent } from '../../containers/PageContent';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
+import NavLink from '../../utils/NavLink';
+import routes from '../../constants/routes.json';
 
 export default function RecordingsList() {
   const processingCount = useSelector(selectProcessingCount)
@@ -80,6 +82,10 @@ export default function RecordingsList() {
   }, [])
 
   return <PageContent title={"Your videos"}>
+    <Box>
+      Curious how to get a video into C4D, Blender, Houdini or After Effects?
+      <NavLink ml={2} title={"Go to Plugins"} to={routes.PLUGINS} />
+    </Box>
     {isLoading ? <ActivityIndicator /> : null}
     {processingCount ? <Box sx={{fontFamily: "monospace"}}>
       <h3>Processing: {processingCount}</h3>

@@ -1,41 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectRecordingsDirPath,
   setRecordingsDirPath
 } from './recordingsDirSlice';
-import { Text, Box, Button, Flex, Heading, LinkProps } from 'rebass';
+import { Text, Button, Flex } from 'rebass';
 import { PageContent } from '../../containers/PageContent';
 import { colors } from '../../theme';
 import routes from '../../constants/routes.json';
-import { Link as RouterLink } from 'react-router-dom'
-import { Link as RebassLink } from 'rebass'
-import { RootState } from '../../store';
 import Preferences from '../../Preferences';
 import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
-
-const NavLink = (props: {title: string, to: string, disabled?: boolean}) => {
-  // @ts-ignore
-  let prop: LinkProps = {to: props.to}
-  let currentLocation = useSelector((state: RootState) => state.router.location)
-
-  let isActive = currentLocation.pathname == props.to
-
-  return <RebassLink
-    sx={{
-      display: 'inline-block',
-      fontWeight: 'bold',
-      py: 1,
-      color: isActive ? 'highlight' : 'secondary',
-      fontFamily: "monospace"
-    }}
-    as={RouterLink}
-    disabled={props.disabled || isActive}
-    {...prop}
-  >
-    {props.title}
-  </RebassLink>
-}
+import NavLink from '../../utils/NavLink';
 
 export default function RecordingsDir() {
   const recordingsDirPath = useSelector(selectRecordingsDirPath)

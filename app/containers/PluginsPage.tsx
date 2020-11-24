@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Link, Text } from 'rebass';
 import PluginRegistry from '../plugins/PluginRegistry';
 import ByplayPlugin, { IByplayPluginManifest } from '../plugins/ByplayPlugin';
 import ByplayHoudiniPluginPackageInstaller from '../plugins/ByplayHoudiniPluginPackageInstaller';
@@ -19,6 +19,8 @@ import { Action } from 'redux';
 import { RootState } from '../store';
 import ByplayPluginPackageInstaller from '../plugins/ByplayPluginPackageInstaller';
 import ByplayBlenderPluginPackageInstaller from '../plugins/ByplayBlenderPluginPackageInstaller';
+import routes from '../constants/routes.json';
+import NavLink from '../utils/NavLink';
 
 interface IPluginStateOps {
   setInstalledVersion: (version: string) => Action,
@@ -57,6 +59,11 @@ function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: st
   if(props.manifest.id == "byplay-houdini") {
     return <video autoPlay muted controls>
       <source src={"https://storage.googleapis.com/byplay-website/standalone/houdini_plugin_demo.mov"}/>
+    </video>
+  }
+  if(props.manifest.id == "byplay-blender") {
+    return <video autoPlay muted controls>
+      <source src={"https://storage.googleapis.com/byplay-website/standalone/blender_plugin_demo.mov"}/>
     </video>
   }
   return null
@@ -192,13 +199,29 @@ export default function PluginsPage() {
       <Text color={"muted"}>
         Byplay has plugins and exported files that simplify your workflow in VFX packages.
       </Text>
-
+      <Box my={3}>
+        <Flex>
+          <Text fontWeight={"bold"}>Houdini</Text>
+        </Flex>
+        <Text>
+          Install the plugin below
+        </Text>
+      </Box>
       <Box my={3}>
         <Flex>
           <Text fontWeight={"bold"}>Cinema4D</Text>
         </Flex>
         <Text>
           In every video folder you can find "c4d_scene.fbx" file that contains point cloud and animated camera
+        </Text>
+      </Box>
+      <Box my={3}>
+        <Flex>
+          <Text fontWeight={"bold"}>After Effects</Text>
+        </Flex>
+        <Text>
+          In every video folder you can find "ae_scene.jsx". In AE: "File - Scripts - Run Script File", then choose ae_scene.jsx <br />
+          See the <Link href={"https://www.youtube.com/watch?v=SfjIaYS8ChE"}>one-minute tutorial</Link>
         </Text>
       </Box>
       <Box my={3}>
@@ -219,6 +242,10 @@ export default function PluginsPage() {
           <h3>Available plugins ({manifests.length}):</h3>
           {manifests.map(manifest => <PluginBox key={manifest.id} manifest={manifest} />)}
         </Box>}
+    </Box>
+
+    <Box p={2}>
+      <NavLink title={"Continue ->"} to={routes.RECORDINGS_LIST} />
     </Box>
   </PageContent>
 }
