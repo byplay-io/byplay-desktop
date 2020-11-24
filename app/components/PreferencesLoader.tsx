@@ -5,13 +5,20 @@ import { setRecordingsDirPath } from '../features/recordingsDir/recordingsDirSli
 import { setAccessToken } from '../features/auth/authSlice';
 import { setFFMPEGPath } from '../features/ffmpeg/ffmpegSlice';
 import { info } from 'electron-log';
-import { setInstalledHoudiniPluginVersion } from '../features/plugins/pluginsSlice';
+import { setInstalledBlenderPluginVersion, setInstalledHoudiniPluginVersion } from '../features/plugins/pluginsSlice';
 
 export default function PreferencesLoader() {
   const dispatch = useDispatch()
   useEffect(() => {
     info("Loading preferences")
-    new Preferences().read().then(({recordingsDir, accessToken, ffmpegPath, houdiniPluginVersion}) => {
+    new Preferences().read().then((
+      {
+        recordingsDir,
+        accessToken,
+        ffmpegPath,
+        houdiniPluginVersion,
+        blenderPluginVersion
+      }) => {
       if(recordingsDir) {
         dispatch(setRecordingsDirPath(recordingsDir))
       }
@@ -23,6 +30,9 @@ export default function PreferencesLoader() {
       }
       if(houdiniPluginVersion) {
         dispatch(setInstalledHoudiniPluginVersion(houdiniPluginVersion))
+      }
+      if(blenderPluginVersion) {
+        dispatch(setInstalledBlenderPluginVersion(blenderPluginVersion))
       }
     })
   }, [])

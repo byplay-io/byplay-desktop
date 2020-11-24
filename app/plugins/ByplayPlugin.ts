@@ -21,12 +21,18 @@ export default class ByplayPlugin {
     ).makePaths()
   }
 
-  makeInstaller() {
-    return new ByplayPluginInstaller(
-      this.paths,
-      this.manifest.downloadUrl
+  downloadUrl() {
+    return this.manifest.downloadUrl.replaceAll(
+      "{PLUGIN_ID}", this.manifest.id
+    ).replaceAll(
+      "{PLUGIN_BUILD_NUMBER}", this.manifest.buildNumber.toString()
     )
   }
 
-
+  makeInstaller() {
+    return new ByplayPluginInstaller(
+      this.paths,
+      this.downloadUrl()
+    )
+  }
 }
