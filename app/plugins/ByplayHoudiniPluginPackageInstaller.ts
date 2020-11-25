@@ -26,14 +26,16 @@ export default class ByplayHoudiniPluginPackageInstaller extends ByplayPluginPac
       return {
         success: true,
         message: `Byplay has been installed to:\n${installedTo.join("\n")}`,
-        openDir: null
+        openDir: null,
+        docsLink: null
       }
     }
 
     return {
       success: false,
       message: `We could not find Houdini's preferences folder. Please, put the '${this.fileName}' file in packages folder yourself`,
-      openDir: await this.openDirForManual()
+      openDir: await this.openDirForManual(),
+      docsLink: this.manualInstallationDocLink()
     }
   }
 
@@ -89,49 +91,4 @@ export default class ByplayHoudiniPluginPackageInstaller extends ByplayPluginPac
 
     return JSON.stringify(templateValue, null, 4)
   }
-}
-
-function f() {
-  const { id, type, createdDate, data, version } = {
-    "id": "5fbc56c4c086540e9a8abb38",
-    "type": "subscription_renewal",
-    "createdDate": "2020-11-24T00:41:40.814Z",
-    "version": "1.1.0",
-    "data": {
-      "id": "5fbc56c4c086540e9a8abb35",
-      "purchaseDate": "2020-11-24T08:39:30.000Z",
-      "quantity": 1,
-      "platform": "ios",
-      "country": "CH",
-      "tags": {},
-      "orderId": "590000234212907",
-      "app": "5f74bb1418f72b0e8becc8df",
-      "user": "5fb38afb6533140e8dfb1d70",
-      "product": "5f79ba21b115a50e95bdf41d",
-      "receipt": "5fb38c456533140e8dfb1f5c",
-      "listing": "5f74bb1418f72b0e8becc8e3",
-      "store": "5f74bb1418f72b0e8becc8e5",
-      "currency": "CHF",
-      "price": 34,
-      "convertedCurrency": "USD",
-      "convertedPrice": 37.25,
-      "isSandbox": false,
-      "isRefunded": false,
-      "isSubscription": true,
-      "isSubscriptionActive": true,
-      "isSubscriptionRenewable": true,
-      "isSubscriptionRetryPeriod": false,
-      "isSubscriptionGracePeriod": false,
-      "isTrialConversion": true,
-      "subscriptionPeriodType": "normal",
-      "expirationDate": "2021-11-24T08:39:30.000Z",
-      "linkedPurchase": "5fb38c456533140e8dfb1f5f",
-      "originalPurchase": "5fb38c456533140e8dfb1f5f",
-      "userId": "MxJ2qjxsjTdFfCxqYp6lrzNv2KL2",
-      "productSku": "regular.1year",
-      "productType": "renewable_subscription",
-      "productGroupName": "Byplay Camera access"
-    }
-  }
-  return `Event: ${type}; ${data.price}${data.currency} [${data.convertedPrice}${data.convertedCurrency}]\nUser: ${data.userId} [${data.country}]; Product: ${data.productSku}; S.active: ${data.isSubscriptionActive}`
 }

@@ -70,6 +70,7 @@ function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: st
 
 function PluginBox(props: {manifest: IByplayPluginManifest}) {
   const [logMessages, setLogMessages] = useState<string[]>([])
+  const [docsLink, setDocsLink] = useState<string | null>(null)
   const [isInstalling, setIsInstalling] = useState(false)
   const dispatch = useDispatch()
   const version = props.manifest.buildNumber.toString()
@@ -110,6 +111,7 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
         new Preferences().set(pluginOps.preferencesKey, version)
         dispatch(pluginOps.setInstalledVersion(version))
       }
+      setDocsLink(installerResult.docsLink)
       if (installerResult.openDir) {
         require('electron').shell.openItem(installerResult.openDir)
       }
@@ -165,14 +167,12 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
           Install manually
         </Button>
       </Box> : null}
-      { logMessages.length > 0 ?
+      {(logMessages.length > 0 || docsLink) ?
         <Box style={{border: "1px dashed #777"}} p={2}>
-          {
-            logMessages.map((v, i) =>
-              <Text fontSize={1} key={"k-" + i}>{v}</Text>
-            )
-          }
-        </Box> : null }
+          {logMessages.map((v, i) =>
+              <Text fontSize={1} key={"k-" + i}>{v}</Text>)}
+          {docsLink ? <ExternalURLLink href={docsLink}>See docs</ExternalURLLink> : null}
+        </Box> : null}
     </Box>
     <Box width={400} p={3}>
       <HelperBox

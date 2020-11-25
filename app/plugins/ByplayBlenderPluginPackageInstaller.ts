@@ -25,10 +25,12 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
         info("Installed!")
       }
     }
+
     if(installedTo.length > 0) {
       return {
         success: true,
         message: `Byplay has been installed to:\n${installedTo.join("\n")}`,
+        docsLink: null,
         openDir: null,
       }
     }
@@ -36,6 +38,7 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
     return {
       success: false,
       message: `We could not find Blender's Addons folder. Please, install '${this.fileName}' addon yourself`,
+      docsLink: this.manualInstallationDocLink(),
       openDir: await this.openDirForManual()
     }
   }
@@ -50,13 +53,10 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
 
   listAllHoudiniDirs() {
     const appData = app.getPath('appData')
-    let windowsPaths = path.join(
-      appData,
-      "Roaming",
-      "Blender Foundation",
-      "Blender",
-      "{V}"
-    )
+    let windowsPaths = [
+      path.join(appData, "Roaming", "Blender Foundation", "Blender", "{V}"),
+      path.join(appData, "Blender Foundation", "Blender", "{V}")
+    ]
     let nixPaths = path.join(appData, 'Blender', "{V}")
     return [
       windowsPaths,
@@ -67,7 +67,10 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
   makeFileContent() {
     const pluginPath = this.paths.symlinkPath.replace(/\\/g, '/')
     const dataPath = new Preferences().path.replace(/\\/g, '/')
-    const logPath = join(dirname(log.transports.file.getFile().path), "blender-plugin.log")
+    const logPath = join(
+      dirname(log.transports.file.getFile().path),
+      "blender-plugin.log"
+    ).replace(/\\/g, '/')
 
     const pythonTemplate = fs.readFileSync(
       join(

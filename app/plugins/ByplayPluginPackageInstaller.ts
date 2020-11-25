@@ -7,7 +7,8 @@ const { app } = require('electron').remote
 export interface IPackageInstallStatus {
   success: boolean,
   message: string,
-  openDir: string | null
+  openDir: string | null,
+  docsLink: string | null,
 }
 
 export default abstract class ByplayPluginPackageInstaller {
@@ -57,9 +58,12 @@ export default abstract class ByplayPluginPackageInstaller {
     return dir
   }
 
+  manualInstallationDocLink() {
+    return `https://byplay.io/docs/plugins/${this.plugin.manifest.id}/manual-installation`
+  }
+
   makeManualInstallReadme() {
     return `When Byplay plugin auto installation didn't work, you can install it manually. \n` +
-      `To see instructions, go to: \n` +
-      `https://byplay.io/docs/plugins/${this.plugin.manifest.id}/manual-installation`
+      `To see instructions, go to: \n` + this.manualInstallationDocLink()
   }
 }
