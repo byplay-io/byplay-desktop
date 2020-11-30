@@ -2,8 +2,9 @@ import path, { dirname, join } from 'path';
 import { promises } from 'fs';
 import * as fs from 'fs';
 import Preferences from '../Preferences';
-import log, { info } from "electron-log";
+import log, { info, error } from "electron-log";
 import ByplayPluginPackageInstaller, { IPackageInstallStatus } from './ByplayPluginPackageInstaller';
+const Sentry = require('@sentry/electron/dist/renderer')
 const { app } = require('electron').remote
 
 export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPackageInstaller {
@@ -16,14 +17,20 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
   async install(): Promise<IPackageInstallStatus> {
     let installedTo: string[] = []
 
-    for(let dir of this.listAllHoudiniDirs()) {
-      info("Checking dir", dir)
-      if(await this.isNotEmptyDir(dir)) {
-        let jsonPath = this.packageJsonPath(dir)
-        await promises.writeFile(jsonPath, this.makeFileContent())
-        installedTo.push(dir)
-        info("Installed!")
+    try {
+      for (let dir of this.listAllHoudiniDirs()) {
+        info("Checking dir", dir)
+        if (await this.isNotEmptyDir(dir)) {
+          let jsonPath = this.packageJsonPath(dir)
+          await promises.writeFile(jsonPath, this.makeFileContent())
+          installedTo.push(dir)
+          info("Installed!")
+        }
       }
+    } catch (e) {
+      Sentry.captureException(e)
+      error("Exception while installing blender plugin")
+      error(e)
     }
 
     if(installedTo.length > 0) {

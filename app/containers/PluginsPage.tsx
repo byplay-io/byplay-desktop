@@ -54,16 +54,20 @@ function getPluginStateOps(pluginId: string): IPluginStateOps {
 }
 
 function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: string | null}) {
-  if(!props.installedVersion) {
-    return null
-  }
   if(props.manifest.id == "byplay-houdini") {
     return <video autoPlay muted controls>
       <source src={"https://storage.googleapis.com/byplay-website/standalone/houdini_plugin_demo.mov"}/>
     </video>
   }
   if(props.manifest.id == "byplay-blender") {
-    return <Box>Go to <ExternalURLLink href={"https://byplay.io/docs/blender"}>https://byplay.io/docs/blender</ExternalURLLink> to learn about the Blender plugin</Box>
+    return <Box>
+      <Box py={2}>
+        Go to <ExternalURLLink href={"https://byplay.io/docs/blender"}>https://byplay.io/docs/blender</ExternalURLLink> to learn about the Blender plugin
+      </Box>
+      <video width={400} autoPlay muted controls>
+        <source src={"https://storage.googleapis.com/byplay-website/standalone/blender_plugin_demo.mp4"}/>
+      </video>
+    </Box>
   }
   return null
 }
