@@ -60,6 +60,16 @@ export default class ByplayAPIClient {
     return this.wrapSuccess(respVal as IByplayCheckTmpSignInCodeResponse)
   }
 
+  async sendFeedback(text: string, extra: any) {
+    console.log("Sending feedback", text)
+    let res = await axios.post<any, AxiosResponse<"ok">>(
+      this.makeUrl(`feedback`),
+      { text, extra },
+      { headers: this.headers(true) }
+    )
+    console.log(res)
+  }
+
   private wrapSuccess<T>(resp: T): IByplayAPIResponse<T> {
     return {
       success: true,
@@ -68,8 +78,12 @@ export default class ByplayAPIClient {
     }
   }
 
-  private headers() {
+  private headers(allowEmptyToken = false) {
     let token = this.getAccessToken()
+    if(!token && allowEmptyToken) {
+      console.log("Setting empty token")
+      token = "-"
+    }
     if(!token) {
       throw "Access token is empty!"
     }

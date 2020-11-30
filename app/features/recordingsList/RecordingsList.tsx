@@ -18,6 +18,7 @@ import ActivityIndicator from '../../utils/ActivityIndicator';
 import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 import NavLink from '../../utils/NavLink';
 import routes from '../../constants/routes.json';
+import { setFeedbackOpen } from '../feedback/feedbackSlice';
 
 export default function RecordingsList() {
   const processingCount = useSelector(selectProcessingCount)
@@ -46,6 +47,11 @@ export default function RecordingsList() {
   const openVideo = (recordingId: string) => {
     Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_OPEN_VIDEO_CLICKED, { recordingId })
     new RecordingLocalManager(recordingId, store).openVideo()
+  }
+
+  const rateVideo = (recordingId: string, rating: number) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_RATE_CLICKED, { recordingId, rating })
+    dispatch(setFeedbackOpen({ recordingId, rating }))
   }
 
   const checkStatus = (recordingId: string) => {
@@ -108,6 +114,7 @@ export default function RecordingsList() {
           openDir={openDir}
           openInBlender={openInBlender}
           openVideo={openVideo}
+          rateVideo={rateVideo}
           status={statuses[recording.id] || RecordingNotStartedStatus}
         />
       )

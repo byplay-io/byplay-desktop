@@ -1,8 +1,8 @@
+import React from 'react';
 import { Link as RebassLink, LinkProps } from 'rebass';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Link as RouterLink } from 'react-router-dom';
-import React from 'react';
 
 const NavLink = (props: {title: string, to: string, disabled?: boolean, ml?: number}) => {
   // @ts-ignore

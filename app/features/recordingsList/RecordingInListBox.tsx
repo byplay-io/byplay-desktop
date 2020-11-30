@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IRecording, IRecordingStatus, ProcessState, RecordingState } from './recordingsListSlice';
 import { Box, Button, Flex, Text } from 'rebass';
 import { colors } from '../../theme';
 import ActivityIndicator from '../../utils/ActivityIndicator';
+import StarRating from '../feedback/StarRating';
 
 const RecordingNotStartedActions = (props: {
   recording: IRecording,
@@ -14,7 +15,7 @@ const RecordingNotStartedActions = (props: {
     return null
   }
   return <Box>
-    <Button variant={"outline"} onClick={() => setDownloading(recording.id)}>Download</Button>
+    <Button onClick={() => setDownloading(recording.id)}>Download</Button>
   </Box>
 }
 
@@ -43,6 +44,7 @@ const RecordingExtractedActions = (
     openDir: RecordingCallback,
     openInBlender: RecordingCallback,
     openVideo: RecordingCallback,
+    rateVideo: (recordingId: string, rating: number) => void,
     status: IRecordingStatus
   }) => {
   let { recording, status } = props
@@ -51,13 +53,16 @@ const RecordingExtractedActions = (
     return null
   }
 
-  return <Box>
-    <Button variant={"outline"} mr={2} onClick={() => props.openDir(recording.id)}>Open dir</Button>
-    <Button variant={"outline"} mr={2} onClick={() => props.openVideo(recording.id)}>Open video</Button>
+  return <Flex flexDirection={"row"}>
+    <Button variant={"outline"} mr={2} onClick={() => props.openDir(recording.id)}>Open folder</Button>
+    <Button variant={"outline"} mr={2} onClick={() => props.openVideo(recording.id)}>Video</Button>
     <Button variant={"outline"} mr={2} onClick={() => props.openInBlender(recording.id)}>
-      Open in Blender <img src={"https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"} alt={"blender"} height={15} />
+      <img src={"https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"} alt={"blender"} height={17} />
     </Button>
-  </Box>
+    <Box flex={"auto"} />
+    <StarRating onClick={(rating: number) => props.rateVideo(recording.id, rating)} />
+    {/*<Button variant={"outline"} mr={2} onClick={() => props.rateVideo(recording.id)}>Rate</Button>*/}
+  </Flex>
 }
 
 
@@ -104,11 +109,19 @@ const RecordingInListBox = (
     openDir: RecordingCallback,
     openInBlender: RecordingCallback,
     openVideo: RecordingCallback,
+    rateVideo: (recordingId: string, rating: number) => void,
     status: IRecordingStatus
   }) => {
   let { recording } = props
 
-  return <Flex flexDirection={"column"} p={2} mb={2} mr={2} width={500} bg={colors.secondaryBg}>
+  let bgColor = colors.secondaryBg
+  if(props.status.state == RecordingState.NOT_STARTED) {
+    bgColor = colors.warnBg
+  }
+  if(props.status.state == RecordingState.IN_PROGRESS) {
+    bgColor = colors.waitBg
+  }
+  return <Flex flexDirection={"column"} p={2} mb={2} mr={2} width={500} bg={bgColor}>
     <RecordingInfoBox recording={recording} />
     <Box pt={3}>
       <RecordingInProgressActions {...props} />

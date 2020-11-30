@@ -12,12 +12,14 @@ import { Box } from 'rebass';
 import SignOutContainer from './features/auth/SignOutContainer';
 import SupportPage from './containers/SupportPage';
 import PreferencesLoader from './components/PreferencesLoader';
+import FeedbackModal from './features/feedback/FeedbackModal';
 
 export default function Routes() {
   return (
     <App>
       <PreferencesLoader />
       <NavigationMenu />
+      <FeedbackModal />
       <Box m={2}>
         <Switch>
           <Route exact path={routes.SETUP} component={SetupPage} />

@@ -39,7 +39,6 @@ export default function SupportPage() {
       Check out the <Link onClick={openDocs}>docs section</Link> on the byplay.io website
     </Text>
 
-
     <Text my={3}>
       If you have any questions or are facing difficulties,<br />
       email us at <Link onClick={writeMail}>hello@byplay.io</Link>
