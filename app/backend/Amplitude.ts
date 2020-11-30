@@ -29,6 +29,7 @@ export enum AnalyticsUserEventType {
   RECORDING_DOWNLOAD_CLICKED = "recording download clicked",
   RECORDING_OPEN_DIR_CLICKED = "recording open dir clicked",
   RECORDING_OPEN_VIDEO_CLICKED = "recording open video clicked",
+  RECORDING_RATE_CLICKED = "recording rate clicked",
   RECORDING_OPEN_BLENDER_CLICKED = "recording open blender clicked",
   RECORDING_DOWNLOADED = "recording downloaded",
   RECORDING_EXTRACTED = "recording extracted",
@@ -40,6 +41,10 @@ export enum AnalyticsUserEventType {
   SUPPORT_OPEN_LOGS_CLICKED = "support page open logs clicked",
   SUPPORT_OPEN_DOCS_CLICKED = "support page open docs clicked",
   SUPPORT_WRITE_EMAIL_CLICKED = "support write email clicked",
+
+  FEEDBACK_MODAL_OPEN = "feedback modal open",
+  FEEDBACK_MODAL_SENT = "feedback modal sent",
+  FEEDBACK_MODAL_CLOSED = "feedback modal closed",
 }
 
 export const Analytics = {
