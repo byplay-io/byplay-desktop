@@ -5,6 +5,8 @@ import Downloader from '../../backend/Downloader';
 
 const { app } = require('electron').remote
 
+const mv = require('mv');
+
 export default class FfmpegDownloader {
   constructor() {
   }
@@ -21,7 +23,11 @@ export default class FfmpegDownloader {
 
     let tmpDownloadPath = path.join(app.getPath('temp'), `Byplay_ffmpeg_${Date.now()}`)
     await Downloader.download(this.getUrl(), tmpDownloadPath, onProgress)
-    await fs.promises.rename(tmpDownloadPath, newPath)
+    await new Promise((resolve) => {
+      mv(tmpDownloadPath, newPath, resolve)
+    })
+    console.log("Moved ffmpeg", tmpDownloadPath, newPath)
+    // await fs.promises.rename(tmpDownloadPath, newPath)
     await fs.chmodSync(newPath, 0o755);
     return newPath
   }
