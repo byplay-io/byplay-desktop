@@ -122,6 +122,21 @@ const recordingsListSlice = createSlice({
         return
       }
       state.statuses[action.payload] = RecordingNotStartedStatus
+    },
+
+    setRecordingStatusesBulk: (state, action: PayloadAction<{notStarted: string[], extracted: string[]}>) => {
+      for(let id of action.payload.notStarted) {
+        if (!state.statuses[id]) {
+          state.statuses[id] = RecordingNotStartedStatus
+        }
+      }
+      for(let id of action.payload.extracted) {
+        state.statuses[id] = {
+          state: RecordingState.EXTRACTED,
+          downloadState: ProcessState.DONE,
+          extractState: ProcessState.DONE
+        }
+      }
     }
   },
 });
@@ -130,6 +145,7 @@ export const {
   setRecordingsListFromServer,
   setRecordingStatusDownloading,
   setRecordingStatusExtracted,
+  setRecordingStatusesBulk,
   setRecordingStatusAtLeastNotStarted,
   setRecordingStatusExtracting,
   setRecordingStatusDownloaded,

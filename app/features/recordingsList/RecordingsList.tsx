@@ -6,8 +6,7 @@ import {
   selectRecordingsList,
   selectRecordingStatuses,
   setRecordingsListFromServer,
-  setRecordingStatusAtLeastNotStarted,
-  setRecordingStatusExtracted
+  setRecordingStatusesBulk
 } from './recordingsListSlice';
 import RecordingLocalManager from '../../backend/RecordingLocalManager';
 import ByplayAPIClient from '../../backend/ByplayAPIClient';
@@ -19,6 +18,7 @@ import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
 import NavLink from '../../utils/NavLink';
 import routes from '../../constants/routes.json';
 import { setFeedbackOpen } from '../feedback/feedbackSlice';
+import { IRecordingEntry } from '../../types/byplayAPI';
 
 export default function RecordingsList() {
   const processingCount = useSelector(selectProcessingCount)
@@ -54,14 +54,27 @@ export default function RecordingsList() {
     dispatch(setFeedbackOpen({ recordingId, rating }))
   }
 
-  const checkStatus = (recordingId: string) => {
-    if(!statuses[recordingId]) {
-      if (new RecordingLocalManager(recordingId, store).isExtracted()) {
-        dispatch(setRecordingStatusExtracted(recordingId))
+  const deleteRecording = (recordingId: string) => {
+    Analytics.registerUserEvent(AnalyticsUserEventType.RECORDING_DELETED, { recordingId })
+    new RecordingLocalManager(recordingId, store).deleteFromCloud()
+  }
+
+  const checkStatuses = (recordings: IRecordingEntry[]) => {
+    let extracted: string[] = []
+    let notStarted: string[] = []
+
+    for(let {id} of recordings) {
+      if(statuses[id]) {
+        continue
+      }
+      if (new RecordingLocalManager(id, store).isExtracted()) {
+        extracted.push(id)
       } else {
-        dispatch(setRecordingStatusAtLeastNotStarted(recordingId))
+        notStarted.push(id)
       }
     }
+
+    dispatch(setRecordingStatusesBulk({ extracted, notStarted }))
   }
 
   const reloadList = () => {
@@ -71,9 +84,8 @@ export default function RecordingsList() {
       rl => {
         let recordings = rl.response!
         dispatch(setRecordingsListFromServer(recordings))
-        for(let {id} of recordings.recordings) {
-          checkStatus(id)
-        }
+        checkStatuses(recordings.recordings)
+
         setLoading(false)
       }
     ).catch(e => {
@@ -115,6 +127,7 @@ export default function RecordingsList() {
           openInBlender={openInBlender}
           openVideo={openVideo}
           rateVideo={rateVideo}
+          deleteRecording={deleteRecording}
           status={statuses[recording.id] || RecordingNotStartedStatus}
         />
       )
