@@ -1,4 +1,5 @@
 import {
+  removeRecordingFromList,
   setRecordingStatusDownloaded,
   setRecordingStatusDownloading,
   setRecordingStatusExtracted,
@@ -52,8 +53,14 @@ export default class RecordingLocalManager {
     }
   }
 
+
   async openVideo() {
     this.openItem(join(this.path, "src_video.mp4"))
+  }
+
+  async deleteFromCloud() {
+    this.store.dispatch(removeRecordingFromList(this.recordingId))
+    await ByplayAPIClient.instance.recordingDelete(this.recordingId)
   }
 
   private async extract() {
@@ -144,4 +151,5 @@ export default class RecordingLocalManager {
     const {shell} = require('electron')
     shell.openItem(path)
   }
+
 }

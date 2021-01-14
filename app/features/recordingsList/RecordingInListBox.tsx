@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IRecording, IRecordingStatus, ProcessState, RecordingState } from './recordingsListSlice';
 import { Box, Button, Flex, Text } from 'rebass';
 import { colors } from '../../theme';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 import StarRating from '../feedback/StarRating';
+import { IoTrash } from 'react-icons/io5';
 
 const RecordingNotStartedActions = (props: {
   recording: IRecording,
@@ -65,8 +66,23 @@ const RecordingExtractedActions = (
   </Flex>
 }
 
+const RecordingDeleteBox = (props: {recording: IRecording, onDelete: (recordingId: string) => void}) => {
+  const handleClick = () => {
+    const res = confirm("This will delete the video from the cloud, but not from the disk. Proceed?")
+    if(res) {
+      props.onDelete(props.recording.id)
+    }
+  }
 
-const RecordingInfoBox = (props: {recording: IRecording}) => {
+  return <Box ml={'auto'}>
+    <Button variant={"outlineDanger"} onClick={handleClick}>
+      <IoTrash />
+    </Button>
+  </Box>
+}
+
+
+const RecordingInfoBox = (props: {recording: IRecording, onDeleteRecording: RecordingCallback}) => {
   let { recording } = props
   let { framesCount, fps }  = recording.recordingManifest
   let duration = Math.round(framesCount / fps)
@@ -97,6 +113,7 @@ const RecordingInfoBox = (props: {recording: IRecording}) => {
         <Text ml={1}>{recording.recordingManifest.framesCount} at {recording.recordingManifest.fps} fps</Text>
       </Flex>
     </Box>
+    <RecordingDeleteBox recording={props.recording} onDelete={props.onDeleteRecording} />
   </Flex>
 }
 
@@ -110,6 +127,7 @@ const RecordingInListBox = (
     openInBlender: RecordingCallback,
     openVideo: RecordingCallback,
     rateVideo: (recordingId: string, rating: number) => void,
+    deleteRecording: RecordingCallback,
     status: IRecordingStatus
   }) => {
   let { recording } = props
@@ -122,7 +140,7 @@ const RecordingInListBox = (
     bgColor = colors.waitBg
   }
   return <Flex flexDirection={"column"} p={2} mb={2} mr={2} width={500} bg={bgColor}>
-    <RecordingInfoBox recording={recording} />
+    <RecordingInfoBox recording={recording} onDeleteRecording={props.deleteRecording} />
     <Box pt={3}>
       <RecordingInProgressActions {...props} />
       <RecordingNotStartedActions {...props} />

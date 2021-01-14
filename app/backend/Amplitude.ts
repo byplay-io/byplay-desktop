@@ -34,6 +34,8 @@ export enum AnalyticsUserEventType {
   RECORDING_DOWNLOADED = "recording downloaded",
   RECORDING_EXTRACTED = "recording extracted",
 
+  RECORDING_DELETED = "recording deleted",
+
   SUPPORT_PAGE_RENDERED = "support page rendered",
   SIGN_OUT_CLICKED = "sign out clicked",
   EXTERNAL_URL_LINK_CLICKED = "external url link clicked",

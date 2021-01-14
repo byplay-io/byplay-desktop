@@ -124,6 +124,17 @@ export default {
         color: colors.primaryBg
       }
     },
+    outlineDanger: {
+      variant: 'buttons.primary',
+      color: 'danger',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 2px',
+      fontWeight: 'normal',
+      '&:hover': {
+        backgroundColor: 'danger',
+        color: colors.primaryBg
+      }
+    },
     secondary: {
       variant: 'buttons.primary',
       color: 'background',

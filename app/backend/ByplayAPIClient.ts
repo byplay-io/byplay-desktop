@@ -3,7 +3,7 @@ import { info } from 'electron-log';
 import {
   IByplayAPIResponse,
   IByplayAPIResponseAuthTmpSignInCode,
-  IByplayAPIResponseRecordingLinks, IByplayCheckTmpSignInCodeResponse,
+  IByplayAPIResponseRecordingLinks, IByplayAPIResponseStatusOk, IByplayCheckTmpSignInCodeResponse,
   IRecordingsListResponse
 } from '../types/byplayAPI';
 
@@ -17,6 +17,14 @@ export default class ByplayAPIClient {
 
   constructor(getAccessToken: () => string | null) {
     this.getAccessToken = getAccessToken
+  }
+
+  async recordingDelete(recordingId: string): Resp<IByplayAPIResponseStatusOk> {
+    let resp = await axios.delete<any, AxiosResponse<IByplayAPIResponseStatusOk>>(
+      this.makeUrl(`recordings/${recordingId}`),
+      { headers: this.headers() }
+    )
+    return this.wrapSuccess(resp.data)
   }
 
   async recordingLinks(recordingId: string): Resp<IByplayAPIResponseRecordingLinks> {

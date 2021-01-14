@@ -85,6 +85,12 @@ const recordingsListSlice = createSlice({
       }
     },
 
+    removeRecordingFromList: (state, action: PayloadAction<string>) => {
+      if(state.recordings) {
+        state.recordings = state.recordings!!.filter(r => r.id != action.payload)
+      }
+    },
+
     setRecordingStatusExtracting: {
       reducer: (state, action: PayloadAction<{recordingId: string, extractProgress: string}>) => {
         state.statuses[action.payload.recordingId] = {
@@ -126,7 +132,8 @@ export const {
   setRecordingStatusExtracted,
   setRecordingStatusAtLeastNotStarted,
   setRecordingStatusExtracting,
-  setRecordingStatusDownloaded
+  setRecordingStatusDownloaded,
+  removeRecordingFromList
 } = recordingsListSlice.actions;
 export default recordingsListSlice.reducer
 export const selectProcessingCount = (state: RootState) =>

@@ -46,6 +46,10 @@ export interface IByplayAPIResponseRecordingLinks {
   files: IByplayAPIResponseRecordingFile[]
 }
 
+export interface IByplayAPIResponseStatusOk {
+  status: "ok"
+}
+
 export interface IByplayAPIResponseAuthTmpSignInCode {
   check_token: string,
   tmp_sign_in_code: string
