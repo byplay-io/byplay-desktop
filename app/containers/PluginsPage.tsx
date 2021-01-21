@@ -62,7 +62,8 @@ function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: st
   if(props.manifest.id == "byplay-blender") {
     return <Box>
       <Box py={2}>
-        Go to <ExternalURLLink href={"https://byplay.io/docs/blender"}>https://byplay.io/docs/blender</ExternalURLLink> to learn about the Blender plugin
+        Go to <ExternalURLLink href={"https://byplay.io/docs/blender"}>https://byplay.io/docs/blender</ExternalURLLink> to learn about the Blender plugin. <br />
+        Don't see the import option? Check if plugin is enabled in "Edit &gt; Preferences &gt; Add-ons &gt; Byplay Camera recordign"
       </Box>
       <video width={400} autoPlay muted controls>
         <source src={"https://storage.googleapis.com/byplay-website/standalone/blender_plugin_demo.mp4"}/>

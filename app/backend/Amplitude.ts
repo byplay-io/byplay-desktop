@@ -47,6 +47,8 @@ export enum AnalyticsUserEventType {
   FEEDBACK_MODAL_OPEN = "feedback modal open",
   FEEDBACK_MODAL_SENT = "feedback modal sent",
   FEEDBACK_MODAL_CLOSED = "feedback modal closed",
+
+  HELP_JUMPY_TRACKING_CLICKED = "help jumpy tracking clicked"
 }
 
 export const Analytics = {

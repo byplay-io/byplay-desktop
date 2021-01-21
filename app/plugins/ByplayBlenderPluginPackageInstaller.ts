@@ -51,7 +51,11 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
   }
 
   packageJsonPath(dir: string): string {
-    let packages = path.join(dir, 'scripts', 'addons')
+    let scripts = path.join(dir, 'scripts')
+    let packages = path.join(scripts, 'addons')
+    if(!fs.existsSync(scripts)) {
+      fs.mkdirSync(scripts)
+    }
     if(!fs.existsSync(packages)) {
       fs.mkdirSync(packages)
     }

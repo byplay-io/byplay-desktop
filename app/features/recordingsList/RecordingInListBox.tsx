@@ -1,10 +1,21 @@
 import React from 'react';
 import { IRecording, IRecordingStatus, ProcessState, RecordingState } from './recordingsListSlice';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Box, Button, Flex, Link, Text } from 'rebass';
 import { colors } from '../../theme';
 import ActivityIndicator from '../../utils/ActivityIndicator';
 import StarRating from '../feedback/StarRating';
 import { IoTrash } from 'react-icons/io5';
+import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
+
+const showJumpyTrackingAlert = () => {
+  Analytics.registerUserEvent(AnalyticsUserEventType.HELP_JUMPY_TRACKING_CLICKED)
+  alert(
+    "AR tracking isn't always perfect.\n" +
+    "If you see that camera is jittering or jumpy, send feedback for that video by clicking stars and mentioning the problem\n" +
+    "and I'll run refinement for it manually, emailing you the result\n" +
+    "This is a temporary workflow until I make sure that refinement works in most cases"
+  )
+}
 
 const RecordingNotStartedActions = (props: {
   recording: IRecording,
@@ -61,7 +72,12 @@ const RecordingExtractedActions = (
       <img src={"https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"} alt={"blender"} height={17} />
     </Button>
     <Box flex={"auto"} />
-    <StarRating onClick={(rating: number) => props.rateVideo(recording.id, rating)} />
+    <Box style={{position: 'relative'}}>
+      <Box style={{position: 'absolute', top: -20, right: 0}}>
+        <Link fontSize={10} onClick={showJumpyTrackingAlert}>bad tracking?</Link>
+      </Box>
+      <StarRating onClick={(rating: number) => props.rateVideo(recording.id, rating)} />
+    </Box>
     {/*<Button variant={"outline"} mr={2} onClick={() => props.rateVideo(recording.id)}>Rate</Button>*/}
   </Flex>
 }
@@ -82,7 +98,11 @@ const RecordingDeleteBox = (props: {recording: IRecording, onDelete: (recordingI
 }
 
 
-const RecordingInfoBox = (props: {recording: IRecording, onDeleteRecording: RecordingCallback}) => {
+const RecordingInfoBox = (props: {
+  recording: IRecording,
+  onDeleteRecording: RecordingCallback,
+  status: IRecordingStatus
+}) => {
   let { recording } = props
   let { framesCount, fps }  = recording.recordingManifest
   let duration = Math.round(framesCount / fps)
@@ -113,7 +133,9 @@ const RecordingInfoBox = (props: {recording: IRecording, onDeleteRecording: Reco
         <Text ml={1}>{recording.recordingManifest.framesCount} at {recording.recordingManifest.fps} fps</Text>
       </Flex>
     </Box>
-    <RecordingDeleteBox recording={props.recording} onDelete={props.onDeleteRecording} />
+    {props.status.state == RecordingState.IN_PROGRESS ?
+      null :
+      <RecordingDeleteBox recording={props.recording} onDelete={props.onDeleteRecording} /> }
   </Flex>
 }
 
@@ -140,7 +162,11 @@ const RecordingInListBox = (
     bgColor = colors.waitBg
   }
   return <Flex flexDirection={"column"} p={2} mb={2} mr={2} width={500} bg={bgColor}>
-    <RecordingInfoBox recording={recording} onDeleteRecording={props.deleteRecording} />
+    <RecordingInfoBox
+      recording={recording}
+      onDeleteRecording={props.deleteRecording}
+      status={props.status}
+    />
     <Box pt={3}>
       <RecordingInProgressActions {...props} />
       <RecordingNotStartedActions {...props} />
