@@ -68,7 +68,7 @@ export default class RecordingLocalManager {
 
     await this.mkdirLocal("frames")
     let videoPath = join(this.path, "src_video.mp4")
-    let framesPath = join(this.path, "frames", "%05d.png")
+    let framesPath = join(this.path, "frames", "ar_%05d.png")
     let ffmpegPath = this.store.getState().ffmpeg.path!
     let totalFrames = this.getFramesNumber()
     await new FFMPEGWrapper(ffmpegPath).extract(
