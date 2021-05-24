@@ -154,14 +154,18 @@ const RecordingInListBox = (
   }) => {
   let { recording } = props
 
-  let bgColor = colors.secondaryBg
+  let borderColor = colors.secondaryBg
   if(props.status.state == RecordingState.NOT_STARTED) {
-    bgColor = colors.warnBg
+    borderColor = colors.notDownloadedBorder
   }
   if(props.status.state == RecordingState.IN_PROGRESS) {
-    bgColor = colors.waitBg
+    borderColor = colors.downloadingBorder
   }
-  return <Flex flexDirection={"column"} p={2} mb={2} mr={2} width={500} bg={bgColor}>
+  return <Flex flexDirection={"column"}
+               p={2} mb={2} mr={2} width={500}
+               bg={colors.secondaryBg}
+               style={{borderLeft: `5px solid ${borderColor}`}}
+  >
     <RecordingInfoBox
       recording={recording}
       onDeleteRecording={props.deleteRecording}

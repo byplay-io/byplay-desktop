@@ -47,7 +47,7 @@ const NavLink = (props: {title: string, to: string, whenNotSetUp?: boolean, disa
       fontWeight: 'bold',
       px: 2,
       py: 1,
-      color: isActive ? 'highlight' : 'secondary',
+      color: isActive ? 'highlight' : 'primary',
       fontFamily: "monospace"
     }}
     as={RouterLink}
@@ -64,7 +64,7 @@ const NavigationMenu = () => {
   let hasRecordingsDir = !!useSelector(selectRecordingsDirPath)
   let downloadedFfmpeg = !!useSelector(selectFfmpegPath)
 
-  return <Flex height={50} style={{borderBottom: `1px dashed ${colors.brightMuted}`}} bg={"black"} py={2}>
+  return <Flex height={50} style={{borderBottom: `1px dashed ${colors.brightMuted}`}} bg={colors.secondaryBg} py={2}>
     <SetupCheckbox title={"Auth"} active={isAuthorized} />
     <SetupCheckbox title={"Select dir"} active={hasRecordingsDir} />
     <SetupCheckbox title={"Dependencies"} active={downloadedFfmpeg} />

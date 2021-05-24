@@ -13,9 +13,9 @@
 
 body {
   position: relative;
-  color: #F5F5F5;
+  color: #010101;
   height: 100vh;
-  background-color: #1C1018;
+  background-color: #ffffff;
 
   /* background-image: linear-gradient( */
 
@@ -36,7 +36,7 @@ h2 {
   font-size: 2.25rem;
   font-weight: bold;
   letter-spacing: -0.025em;
-  color: #F5F5F5;
+  color: #010101;
 }
 
 p {
