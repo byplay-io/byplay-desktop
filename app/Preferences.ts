@@ -13,6 +13,7 @@ export interface IPersistedPreferences {
   userId: string | null,
   houdiniPluginVersion: string | null,
   blenderPluginVersion: string | null,
+  c4dPluginVersion: string | null,
 }
 
 const emptyPreferences: IPersistedPreferences = {
@@ -23,6 +24,7 @@ const emptyPreferences: IPersistedPreferences = {
   userId: null,
   houdiniPluginVersion: null,
   blenderPluginVersion: null,
+  c4dPluginVersion: null,
 }
 
 type Partial<T> = {

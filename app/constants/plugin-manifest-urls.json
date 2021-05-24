@@ -1,4 +1,5 @@
 {
   "byplayHoudini": "https://raw.githubusercontent.com/byplay-io/byplay-plugins-registry/master/byplay-houdini-plugin.json",
-  "byplayBlender": "https://raw.githubusercontent.com/byplay-io/byplay-plugins-registry/master/byplay-blender-plugin.json"
+  "byplayBlender": "https://raw.githubusercontent.com/byplay-io/byplay-plugins-registry/master/byplay-blender-plugin.json",
+  "byplayC4D": "https://raw.githubusercontent.com/byplay-io/byplay-plugins-registry/master/byplay-c4d-plugin.json"
 }

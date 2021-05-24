@@ -13,7 +13,7 @@ import {
   selectInstalledHoudiniPluginVersion,
   setInstalledHoudiniPluginVersion,
   selectInstalledBlenderPluginVersion,
-  setInstalledBlenderPluginVersion
+  setInstalledBlenderPluginVersion, selectInstalledC4DPluginVersion, setInstalledC4DPluginVersion
 } from '../features/plugins/pluginsSlice';
 import { Action } from 'redux';
 import { RootState } from '../store';
@@ -22,6 +22,7 @@ import ByplayBlenderPluginPackageInstaller from '../plugins/ByplayBlenderPluginP
 import routes from '../constants/routes.json';
 import NavLink from '../utils/NavLink';
 import ExternalURLLink from '../utils/ExternalURLLink';
+import ByplayC4DPluginPackageInstaller from '../plugins/ByplayC4DPluginPackageInstaller';
 
 interface IPluginStateOps {
   setInstalledVersion: (version: string) => Action,
@@ -48,6 +49,15 @@ function getPluginStateOps(pluginId: string): IPluginStateOps {
       preferencesKey: 'blenderPluginVersion',
       packageInstallerFn: (plugin: ByplayPlugin) => new ByplayBlenderPluginPackageInstaller(plugin),
       logo: "https://storage.googleapis.com/byplay-website/standalone/blender-logo-small.png"
+    }
+  }
+  if(pluginId == "byplay-c4d") {
+    return {
+      selectInstalledVersion: selectInstalledC4DPluginVersion,
+      setInstalledVersion: setInstalledC4DPluginVersion,
+      preferencesKey: 'c4dPluginVersion',
+      packageInstallerFn: (plugin: ByplayPlugin) => new ByplayC4DPluginPackageInstaller(plugin),
+      logo: "https://storage.googleapis.com/byplay-website/standalone/c4d-logo-small.png"
     }
   }
   throw `Plugin ${pluginId} unknown`
@@ -157,8 +167,14 @@ function PluginBox(props: {manifest: IByplayPluginManifest}) {
       </Flex>
 
       { installedVersion && installedVersion !== version ?
-        <Flex my={2} style={{borderColor: colors.danger, borderWidth: 1, borderStyle: "solid"}} p={2}>
-          <Text>You have and older version installed: {installedVersion}</Text>
+        <Flex my={2} style={{
+          borderColor: colors.dangerBright,
+          backgroundColor: colors.dangerBright,
+          color: "white", borderWidth: 1,
+          borderStyle: "solid",
+          borderRadius: 5
+        }} p={2}>
+          <Text>You have and older version installed: <b>{installedVersion}</b></Text>
         </Flex>
         : null}
       <Box my={2}>
