@@ -1,12 +1,12 @@
 {
   "name": "byplay-desktop",
   "productName": "Byplay Desktop",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Desktop client for Byplay Camera, allowing you to download shot videos and import them into a VFX package",
   "main": "./main.prod.js",
   "author": {
-    "name": "Byplay Team",
-    "email": "hello@byplay.io",
+    "name": "Vadim from Byplay",
+    "email": "vadim@byplay.io",
     "url": "https://byplay.io"
   },
   "contributors": [
