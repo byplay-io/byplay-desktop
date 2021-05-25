@@ -6,6 +6,7 @@ import ActivityIndicator from '../../utils/ActivityIndicator';
 import StarRating from '../feedback/StarRating';
 import { IoTrash } from 'react-icons/io5';
 import { Analytics, AnalyticsUserEventType } from '../../backend/Amplitude';
+import RenameOldFrameFormatLink from './RenameOldFrameFormatLink';
 
 const showJumpyTrackingAlert = () => {
   Analytics.registerUserEvent(AnalyticsUserEventType.HELP_JUMPY_TRACKING_CLICKED)
@@ -53,6 +54,7 @@ const RecordingInProgressActions = (props: {recording: IRecording, status: IReco
 const RecordingExtractedActions = (
   props: {
     recording: IRecording,
+    redownload: RecordingCallback,
     openDir: RecordingCallback,
     openInBlender: RecordingCallback,
     openVideo: RecordingCallback,
@@ -73,6 +75,12 @@ const RecordingExtractedActions = (
     </Button>
     <Box flex={"auto"} />
     <Box style={{position: 'relative'}}>
+      <Box style={{position: 'absolute', top: -80, right: 0, textAlign: 'right'}}>
+        <RenameOldFrameFormatLink recordingId={recording.id} />
+      </Box>
+      <Box style={{position: 'absolute', top: -40, right: 0}}>
+        <Link fontSize={10} onClick={() => props.redownload(recording.id)}>re-download files</Link>
+      </Box>
       <Box style={{position: 'absolute', top: -20, right: 0}}>
         <Link fontSize={10} onClick={showJumpyTrackingAlert}>bad tracking?</Link>
       </Box>
@@ -145,6 +153,7 @@ const RecordingInListBox = (
   props: {
     recording: IRecording,
     setDownloading: RecordingCallback,
+    redownload: RecordingCallback,
     openDir: RecordingCallback,
     openInBlender: RecordingCallback,
     openVideo: RecordingCallback,

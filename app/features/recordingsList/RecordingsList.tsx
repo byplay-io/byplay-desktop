@@ -19,12 +19,14 @@ import NavLink from '../../utils/NavLink';
 import routes from '../../constants/routes.json';
 import { setFeedbackOpen } from '../feedback/feedbackSlice';
 import { IRecordingEntry } from '../../types/byplayAPI';
+import RedownloadRecordingModal from './RedownloadRecordingModal';
 
 export default function RecordingsList() {
   const processingCount = useSelector(selectProcessingCount)
   const recordings = useSelector(selectRecordingsList)
   const statuses = useSelector(selectRecordingStatuses)
   const [isLoading, setLoading] = useState(false)
+  const [redownloadRecordingId, setRedownloadRecordingId] = useState<null | string>(null)
 
   const dispatch = useDispatch()
   const store = useStore()
@@ -123,6 +125,7 @@ export default function RecordingsList() {
           key={recording.id}
           recording={recording}
           setDownloading={setDownloading}
+          redownload={setRedownloadRecordingId}
           openDir={openDir}
           openInBlender={openInBlender}
           openVideo={openVideo}
@@ -133,5 +136,10 @@ export default function RecordingsList() {
       )
     }
     </Flex>
+    { redownloadRecordingId ?
+      <RedownloadRecordingModal
+        recordingId={redownloadRecordingId}
+        onClose={() => setRedownloadRecordingId(null)}
+      /> : null }
   </PageContent>
 }

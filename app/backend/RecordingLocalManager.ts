@@ -9,10 +9,11 @@ import { Store } from '../store';
 import ByplayAPIClient from './ByplayAPIClient';
 import Downloader from './Downloader';
 import { selectRecordingsDirPath } from '../features/recordingsDir/recordingsDirSlice';
-import fs from 'fs';
+import fs, { promises } from 'fs';
 import { formatBytesProgress } from '../utils/format';
 import FFMPEGWrapper from '../utils/FFMPEGWrapper';
 import { Analytics, AnalyticsUserEventType } from './Amplitude';
+import { IByplayAPIResponseRecordingFile } from '../types/byplayAPI';
 
 const {join, dirname} = require('path')
 
@@ -45,6 +46,12 @@ export default class RecordingLocalManager {
   }
 
   async openInBlender() {
+    for(let f of await fs.promises.readdir(this.path)) {
+      if(f.endsWith("_ar_v1.blend")) {
+        this.openItem(join(this.path, f))
+        return
+      }
+    }
     for(let f of await fs.promises.readdir(this.path)) {
       if(f.endsWith(".blend")) {
         this.openItem(join(this.path, f))
@@ -92,6 +99,14 @@ export default class RecordingLocalManager {
     return fs.existsSync(this.path)
   }
 
+  doesExist(filePath: string): boolean {
+    return fs.existsSync(join(this.path, filePath))
+  }
+
+  isOldExtracted(): boolean {
+    return this.doesExist("frames/00001.png")
+  }
+
   private extractedFlagPath() {
     return join(this.path, ".extracted")
   }
@@ -100,6 +115,21 @@ export default class RecordingLocalManager {
     return this.store.getState().recordingsList!.recordings!.find(
       rec => rec.id == this.recordingId
     )!.recordingManifest!.framesCount
+  }
+
+  public async getRedownloadFileList(): Promise<IByplayAPIResponseRecordingFile[]> {
+    return (
+      await ByplayAPIClient.instance.recordingLinks(this.recordingId)
+    ).response?.files!
+  }
+
+  public async dowloadFile(path: string, link: string, onProgress: (v: number) => void = (_) => null) {
+    let fullPath = join(this.path, path)
+    await Downloader.download(
+      link,
+      fullPath,
+      (_fileSize, currDownloaded) => onProgress(currDownloaded)
+    )
   }
 
   private async download() {
@@ -114,8 +144,7 @@ export default class RecordingLocalManager {
 
     let totalDownloaded = 0
     for(let {link, path, size} of linksResponse.response?.files!) {
-      let fullPath = join(this.path, path)
-      await Downloader.download(link, fullPath, (_fileSize, currDownloaded) => {
+      await this.dowloadFile(path, link, currDownloaded => {
         let currentlyDownloaded = totalDownloaded + currDownloaded
         this.store.dispatch(
           setRecordingStatusDownloading(
@@ -152,4 +181,14 @@ export default class RecordingLocalManager {
     shell.openItem(path)
   }
 
+  async renameOldFramesToNew() {
+    let renames = await promises.readdir(join(this.path, "frames"))
+    renames = renames
+      .filter((name) => name.length == 9 && !name.startsWith("ar_"))
+    return Promise.all(
+      renames.map(
+        name => promises.rename(join(this.path, "frames", name), join(this.path, "frames", "ar_" + name))
+      )
+    )
+  }
 }
