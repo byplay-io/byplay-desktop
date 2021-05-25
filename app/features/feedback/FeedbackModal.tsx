@@ -140,7 +140,7 @@ export default function FeedbackModal() {
             </Box>
             <RecordingRating />
             <Box>
-              <Label htmlFor='email'>Message</Label>
+              <Label>Message (include an email address if you want to)</Label>
               <Textarea
                 style={{width: 400, height: 100}}
                 onChange={event => setFeedbackText(event.target.value)}

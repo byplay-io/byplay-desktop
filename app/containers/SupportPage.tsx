@@ -26,11 +26,11 @@ export default function SupportPage() {
     AnalyticsUserEventType.SUPPORT_OPEN_LOGS_CLICKED
   )
   const openDocs = () => openUrl(
-    "https://byplay.io/docs",
+    "https://docs.byplay.io",
     AnalyticsUserEventType.SUPPORT_OPEN_DOCS_CLICKED
   )
   const writeMail = () => openUrl(
-    "mailto:hello@byplay.io",
+    "mailto:vadim@byplay.io",
     AnalyticsUserEventType.SUPPORT_WRITE_EMAIL_CLICKED
   )
 
@@ -41,7 +41,7 @@ export default function SupportPage() {
 
     <Text my={3}>
       If you have any questions or are facing difficulties,<br />
-      email us at <Link onClick={writeMail}>hello@byplay.io</Link>
+      email us at <Link onClick={writeMail}>vadim@byplay.io</Link>
     </Text>
 
     <Text color={"muted"} style={{position: "absolute", bottom: 10}}>
@@ -58,7 +58,7 @@ export default function SupportPage() {
       </Button>
 
       <Text>
-        And send all files you see there to <a href={"mailto:hello@byplay.io"}>hello@byplay.io</a>
+        And send all files you see there to <Link href={"mailto:hello@byplay.io"}>hello@byplay.io</Link>
       </Text>
     </Box>
 

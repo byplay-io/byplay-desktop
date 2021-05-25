@@ -80,6 +80,11 @@ function HelperBox(props: {manifest: IByplayPluginManifest, installedVersion: st
       </video>
     </Box>
   }
+  if(props.manifest.id == "byplay-c4d") {
+    return <video autoPlay muted controls>
+      <source src={"https://storage.googleapis.com/byplay-website/standalone/c4d_plugin_demo.mp4"}/>
+    </video>
+  }
   return null
 }
 
@@ -233,7 +238,8 @@ export default function PluginsPage() {
           <Text fontWeight={"bold"}>Cinema4D</Text>
         </Flex>
         <Text>
-          In every video folder you can find "c4d_scene.fbx" file that contains point cloud and animated camera
+          Install the plugin below.<br />
+          It will import camera FBX, set the background image and Sky HDRs
         </Text>
       </Box>
       <Box my={3}>
@@ -241,7 +247,7 @@ export default function PluginsPage() {
           <Text fontWeight={"bold"}>After Effects</Text>
         </Flex>
         <Text>
-          In every video folder you can find "ae_scene.jsx". In AE: "File - Scripts - Run Script File", then choose ae_scene.jsx <br />
+          In every video folder you can find "ae_scene_ar_v1.jsx". In AE: "File - Scripts - Run Script File", then choose ae_scene_ar_v1.jsx <br />
           See the <ExternalURLLink href={"https://www.youtube.com/watch?v=SfjIaYS8ChE"}>one-minute tutorial</ExternalURLLink>
         </Text>
       </Box>
