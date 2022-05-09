@@ -9,7 +9,7 @@ const { app } = require('electron').remote
 
 export default class ByplayHoudiniPluginPackageInstaller extends ByplayPluginPackageInstaller {
   fileName = "Byplay-Houdini.json"
-  supportedVersions = ['17.5', '18.0', '18.5']
+  supportedVersions = ['17.5', '18.0', '18.5', '19.0', '19.5', '20.0', '20.5']
 
   async install(): Promise<IPackageInstallStatus> {
     let installedTo: string[] = []
