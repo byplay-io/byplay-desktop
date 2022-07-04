@@ -22,9 +22,11 @@ export default class RecordingLocalManager {
   recordingId: string
   path: string
   store: Store
+  motionOnly: boolean
 
   constructor(recordingId: string, store: Store) {
     this.recordingId = recordingId
+    this.motionOnly = this.recordingId.endsWith("_MO")
     this.store = store
     this.path = join(selectRecordingsDirPath(store.getState()), this.recordingId)
   }
@@ -73,26 +75,27 @@ export default class RecordingLocalManager {
   private async extract() {
     this.store.dispatch(setRecordingStatusExtracting(this.recordingId))
 
-    await this.mkdirLocal("frames")
-    let videoPath = join(this.path, "src_video.mp4")
-    let framesPath = join(this.path, "frames", "ar_%05d.png")
-    let ffmpegPath = this.store.getState().ffmpeg.path!
-    let totalFrames = this.getFramesNumber()
-    await new FFMPEGWrapper(ffmpegPath).extract(
-      videoPath,
-      framesPath,
-      processedFrames => {
-        let percent = Math.round(100.0 * processedFrames / totalFrames)
-        this.store.dispatch(
-          setRecordingStatusExtracting(this.recordingId, `${percent}%`)
-        )
-      }
-    )
+    if(!this.motionOnly) {
+      await this.mkdirLocal("frames")
+      let videoPath = join(this.path, "src_video.mp4")
+      let framesPath = join(this.path, "frames", "ar_%05d.png")
+      let ffmpegPath = this.store.getState().ffmpeg.path!
+      let totalFrames = this.getFramesNumber()
+      await new FFMPEGWrapper(ffmpegPath).extract(
+        videoPath,
+        framesPath,
+        processedFrames => {
+          let percent = Math.round(100.0 * processedFrames / totalFrames)
+          this.store.dispatch(
+            setRecordingStatusExtracting(this.recordingId, `${percent}%`)
+          )
+        }
+      )
+    }
 
     await fs.promises.writeFile(this.extractedFlagPath(), "-")
 
     this.store.dispatch(setRecordingStatusExtracted(this.recordingId))
-
   }
 
   isExtracted(): boolean {
