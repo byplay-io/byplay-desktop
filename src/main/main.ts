@@ -14,6 +14,7 @@ import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
+import subscribeMainListeners from '../utils/mainListeners';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class AppUpdater {
@@ -31,6 +32,8 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
+
+subscribeMainListeners();
 
 if (process.env.NODE_ENV === 'production') {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -82,6 +85,7 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      nodeIntegration: true,
     },
   });
 
@@ -96,6 +100,21 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+
+    const filter = {
+      urls: ['https://account.byplay.io/*'],
+    };
+
+    mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+      filter,
+      (details, callback) => {
+        console.log('sending', details);
+        if (details.requestHeaders.Origin) {
+          delete details.requestHeaders.Origin;
+        }
+        callback({requestHeaders: details.requestHeaders});
+      },
+    );
   });
 
   mainWindow.on('closed', () => {
@@ -139,3 +158,7 @@ app
     });
   })
   .catch(console.log);
+
+app.on('ready', () => {
+  // Modify the origin for all requests to the following urls.
+});

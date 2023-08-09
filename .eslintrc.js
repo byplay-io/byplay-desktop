@@ -22,6 +22,9 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     'prettier/prettier': ['error'],
+    'import/prefer-default-export': 'off',
+    'react/destructuring-assignment': 2,
+    '@typescript-eslint/return-await': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
