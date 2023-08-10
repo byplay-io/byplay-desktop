@@ -25,6 +25,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/destructuring-assignment': 2,
     '@typescript-eslint/return-await': 'off',
+    'no-restricted-syntax': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

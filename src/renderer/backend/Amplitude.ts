@@ -1,5 +1,5 @@
 import amplitude from 'amplitude-js';
-import Preferences from '../../utils/Preferences';
+import Preferences from './Preferences';
 import {mapPlatform} from '../../utils/platformHelpers';
 import {getAppVersion} from '../../utils/ipcCommunication';
 

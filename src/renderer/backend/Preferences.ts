@@ -1,9 +1,9 @@
 import {
   emptyPreferences,
   type IPersistedPreferences,
-} from '../types/preferences';
-import {sendRendererToMain} from './ipcCommunication';
-import {IPCChannel} from '../types/ipc';
+} from '../../types/preferences';
+import {sendRendererToMain} from '../../utils/ipcCommunication';
+import {IPCChannel} from '../../types/ipc';
 
 const Preferences = {
   async clear() {

@@ -4,8 +4,9 @@ import './App.css';
 import {configuredStore} from './store';
 import AuthenticateScreen from './Screens/Onboarding/Authenticate';
 import SelectDirectory from './Screens/Onboarding/SelectDirectory';
-import routes, {AppRoute} from './Screens/routes';
+import {AppRoute} from './Screens/routes';
 import usePreferencesLoader from './hooks/preferencesLoader';
+import {RecordingsList} from './Screens/Recordings/RecordingsList';
 
 const store = configuredStore();
 
@@ -22,6 +23,10 @@ export default function App() {
           <PreferencesLoader />
           <Routes>
             <Route path="/" element={<AuthenticateScreen />} />
+            <Route
+              path={AppRoute.RECORDINGS_LIST}
+              element={<RecordingsList />}
+            />
             <Route
               path={AppRoute.ONBOARDING_SELECT_DIR}
               element={<SelectDirectory />}

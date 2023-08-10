@@ -1,17 +1,45 @@
+import {useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 import OnboardingHeader from './components/OnboardingHeader';
+import {
+  selectRecordingsDirPath,
+  setRecordingsDirPath,
+} from '../../state/recordings';
+import {AppRoute} from '../routes';
 
 function FolderSelector() {
+  const dispatch = useDispatch();
+  const dir = useSelector(selectRecordingsDirPath);
+  const saveDir = useCallback(() => {
+    dispatch(setRecordingsDirPath('/Users/vadim/projects/byplay/recordings'));
+  }, [dispatch]);
+
+  const navigate = useNavigate();
+  const continueToApp = useCallback(() => {
+    console.log('continueToApp');
+    navigate(AppRoute.RECORDINGS_LIST);
+  }, [navigate]);
   return (
     <div className="flex flex-row pt-10">
       <div className="bg-dark2 border-primary border-2 flex-grow font-mono flex-row p-4 rounded-2xl">
-        /Users/username/Documents/Byplay
+        /Users/vadim/projects/byplay/recordings
       </div>
-      <div className="bg-primary border-primary border-2 ml-5 flex-row py-4 mr-4 px-8 rounded-2xl text-center">
+      <button
+        type="button"
+        onClick={saveDir}
+        className="bg-primary border-primary border-2 ml-5 flex-row py-4 mr-4 px-8 rounded-2xl text-center"
+      >
         Select
-      </div>
-      <div className="border-primary border-2 text-primary flex-row ml-12 py-4 px-8 rounded-full text-center">
+      </button>
+      <button
+        disabled={dir === null}
+        onClick={continueToApp}
+        type="button"
+        className="border-primary border-2 text-primary flex-row ml-12 py-4 px-8 rounded-full text-center"
+      >
         Continue →
-      </div>
+      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import Preferences from '../../utils/Preferences';
+import Preferences from '../backend/Preferences';
 import {setRecordingsDirPath} from '../state/recordings';
 import {setAccessToken} from '../state/auth';
 import {setFFMPEGPath} from '../state/ffmpeg';
@@ -16,7 +16,12 @@ import {type AppRoute, startRoute} from '../Screens/routes';
 export default function usePreferencesLoader() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
+    if (loaded) {
+      return;
+    }
+    setLoaded(true);
     Preferences.read()
       .then((prefs) => {
         const {
@@ -50,7 +55,7 @@ export default function usePreferencesLoader() {
         return null;
       })
       .catch(console.error);
-  }, [dispatch, navigate]);
+  }, [dispatch, loaded, navigate]);
 
   return null;
 }

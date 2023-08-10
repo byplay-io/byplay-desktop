@@ -5,8 +5,7 @@
 @tailwind variants;
 
 .base-container {
-  @apply h-screen w-screen flex bg-dark1 text-light2 px-12 pt-12;
-
+  @apply min-h-screen h-full flex bg-dark1 text-light2 px-12 pt-12;
 }
 
 .helper-text {

@@ -1,16 +1,18 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
-import {type RootState} from '../../store';
+import {type RootState} from '../store';
 
 export interface RecordingsDirState {
   recordingsDirPath: null | string;
 }
 
+const initialState: RecordingsDirState = {
+  recordingsDirPath: null,
+};
+
 const recordings = createSlice({
   name: 'recordingsDir',
-  initialState: {
-    recordingsDirPath: null,
-  } as RecordingsDirState,
+  initialState,
   reducers: {
     setRecordingsDirPath: (state, action: PayloadAction<string>) => {
       state.recordingsDirPath = action.payload;
@@ -27,4 +29,4 @@ export const {setRecordingsDirPath, setEmptyRecordingsDirPath} =
 export default recordings.reducer;
 
 export const selectRecordingsDirPath = (state: RootState) =>
-  state.recordingsDir.recordingsDirPath;
+  state.recordings.recordingsDirPath;

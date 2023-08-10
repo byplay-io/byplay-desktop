@@ -3,7 +3,6 @@ import {
   type IByplayAPIResponse,
   type IByplayAPIResponseAuthTmpSignInCode,
   type IByplayAPIResponseRecordingLinks,
-  type IByplayAPIResponseStatusOk,
   type IByplayCheckTmpSignInCodeResponse,
   type IRecordingsListResponse,
 } from '../../types/byplayAPI';

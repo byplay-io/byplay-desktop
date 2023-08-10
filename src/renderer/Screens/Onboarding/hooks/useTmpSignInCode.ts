@@ -6,7 +6,7 @@ import {
   setAccessToken,
   setTmpSignInCode,
 } from '../../../state/auth';
-import Preferences from '../../../../utils/Preferences';
+import Preferences from '../../../backend/Preferences';
 import {Analytics, AnalyticsUserEventType} from '../../../backend/Amplitude';
 import {useByplayAPI} from '../../../hooks/byplayAPI';
 import {AppRoute} from '../../routes';
