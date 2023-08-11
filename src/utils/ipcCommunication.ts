@@ -2,6 +2,15 @@ import {IPCChannel} from '../types/ipc';
 
 let reqCountRendererToMain = 0;
 
+export function subscribeRenderFromMain<Msg>(
+  channel: string,
+  handler: (request: Msg) => void,
+) {
+  return window.electron.ipcRenderer.on(channel, (msg) => {
+    handler(msg as Msg);
+  });
+}
+
 export async function sendRendererToMain<Req, Res>(
   channel: IPCChannel,
   request: Req,

@@ -1,4 +1,4 @@
-import {ipcMain} from 'electron';
+import {type BrowserWindow, ipcMain} from 'electron';
 import {type IPCChannel, type MessageM2R} from '../../types/ipc';
 
 export function subscribeMainToRenderer<Req, Res>(
@@ -11,9 +11,15 @@ export function subscribeMainToRenderer<Req, Res>(
   });
 }
 
+let win: BrowserWindow | null = null;
+
+export function setWindowForIpc(w: BrowserWindow) {
+  win = w;
+}
+
 export function sendMainToRenderer<T extends MessageM2R>(
   channel: T['channel'],
   request: T['payload'],
 ): void {
-  ipcMain.emit(channel, request);
+  win?.webContents.send(channel, request);
 }

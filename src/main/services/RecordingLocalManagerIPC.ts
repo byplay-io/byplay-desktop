@@ -1,6 +1,7 @@
 import fs from 'fs';
 import {dirname, join} from 'path';
 import {shell} from 'electron';
+import {info} from 'electron-log';
 import streamDownload from './streamDownload';
 import FFMPEGWrapper from './FFMPEGWrapper';
 import {type IByplayAPIResponseRecordingLinks} from '../../types/byplayAPI';

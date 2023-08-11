@@ -11,20 +11,7 @@ import {type IRecordingEntry} from '../../../../types/byplayAPI';
 import {selectFfmpegPath} from '../../../state/ffmpeg';
 import {selectRecordingsDirPath} from '../../../state/recordings';
 import RecordingLocalManager from '../../../backend/RecordingLocalManager';
-
-function useRecordingLocalManagerFabric() {
-  const ffmpegPath = useSelector(selectFfmpegPath);
-  const recordingDir = useSelector(selectRecordingsDirPath);
-  return useCallback(
-    (recordingId: string) => {
-      if (ffmpegPath === null || recordingDir === null) {
-        throw new Error('ffmpegPath or recordingDir is not set');
-      }
-      return new RecordingLocalManager(recordingId, ffmpegPath, recordingDir);
-    },
-    [ffmpegPath, recordingDir],
-  );
-}
+import {useRecordingLocalManagerFabric} from './recordingManager';
 
 export function useRecordingsList() {
   const [firstLoadStarted, setFirstLoadStarted] = useState(false);
@@ -80,9 +67,6 @@ export function useRecordingsList() {
       });
   }, [byplayAPI, checkStatuses, dispatch]);
 
-  const recordingsList: IRecordingEntry[] =
-    useSelector(selectRecordingsList) ?? [];
-
   useEffect(() => {
     if (!firstLoadStarted) {
       setFirstLoadStarted(true);
@@ -90,5 +74,5 @@ export function useRecordingsList() {
     }
   }, [firstLoadStarted, reloadList]);
 
-  return {loading, reloadList, recordingsList};
+  return {loading, reloadList};
 }

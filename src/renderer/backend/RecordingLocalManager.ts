@@ -1,13 +1,78 @@
+import {type Dispatch} from 'redux';
 import {
   IPCChannel,
   type IRecordingManager,
+  type MessageM2RRecordingProcessProgress,
+  type MessageM2RRecordingProcessStatus,
   type RecordingManagerSettings,
 } from '../../types/ipc';
 import {type IByplayAPIResponseRecordingLinks} from '../../types/byplayAPI';
-import {sendRendererToMain} from '../../utils/ipcCommunication';
+import {
+  sendRendererToMain,
+  subscribeRenderFromMain,
+} from '../../utils/ipcCommunication';
+import {
+  setRecordingStatusDownloaded,
+  setRecordingStatusDownloading,
+  setRecordingStatusExtracted,
+  setRecordingStatusExtracting,
+} from '../state/recordingsList';
 
 export default class RecordingLocalManager implements IRecordingManager {
   settings: RecordingManagerSettings;
+
+  static subscribeProxyToDispatch(dispatch: Dispatch<any>) {
+    const unsubProgress = subscribeRenderFromMain(
+      'recording-process-progress',
+      (msg: MessageM2RRecordingProcessProgress['payload']) => {
+        if (msg.processType === 'download') {
+          dispatch(
+            setRecordingStatusDownloading({
+              recordingId: msg.recordingId,
+              downloadProgress: {total: msg.total, downloaded: msg.done},
+            }),
+          );
+        }
+        if (msg.processType === 'extract') {
+          dispatch(
+            setRecordingStatusExtracting({
+              recordingId: msg.recordingId,
+              extractedFrames: msg.done,
+            }),
+          );
+        }
+      },
+    );
+
+    const unsubStatus = subscribeRenderFromMain(
+      'recording-process-status',
+      (msg: MessageM2RRecordingProcessStatus['payload']) => {
+        if (msg.processType === 'download') {
+          if (msg.status === 'done') {
+            dispatch(setRecordingStatusDownloaded(msg.recordingId));
+          }
+          if (msg.status === 'started') {
+            dispatch(
+              setRecordingStatusDownloading({
+                recordingId: msg.recordingId,
+                downloadProgress: {total: -1, downloaded: 0},
+              }),
+            );
+          }
+        }
+        if (msg.processType === 'extract') {
+          if (msg.status === 'done') {
+            dispatch(setRecordingStatusExtracted(msg.recordingId));
+          }
+        }
+      },
+    );
+    return () => {
+      console.log('RecordingLocalManager.unsubscribeProxyToDispatch');
+      unsubProgress();
+      unsubStatus();
+    };
+  }
 
   constructor(
     recordingId: string,

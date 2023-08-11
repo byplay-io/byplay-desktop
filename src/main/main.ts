@@ -15,6 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import subscribeMainListeners from '../utils/mainListeners';
+import {setWindowForIpc} from './services/ipcCommunicationMain';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class AppUpdater {
@@ -100,26 +101,13 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
-
-    const filter = {
-      urls: ['https://account.byplay.io/*'],
-    };
-
-    mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-      filter,
-      (details, callback) => {
-        console.log('sending', details);
-        if (details.requestHeaders.Origin) {
-          delete details.requestHeaders.Origin;
-        }
-        callback({requestHeaders: details.requestHeaders});
-      },
-    );
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  setWindowForIpc(mainWindow);
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
