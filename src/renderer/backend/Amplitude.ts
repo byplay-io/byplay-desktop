@@ -1,7 +1,7 @@
 import amplitude from 'amplitude-js';
 import Preferences from './Preferences';
 import {mapPlatform} from '../../utils/platformHelpers';
-import {getAppVersion} from '../../utils/ipcCommunication';
+import {getAppVersion, getPlatform} from '../../utils/ipcCommunication';
 
 export enum AnalyticsUserEventType {
   APP_LAUNCHED = 'launched',

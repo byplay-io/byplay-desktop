@@ -21,6 +21,7 @@ export async function sendRendererToMain<Req, Res>(
     window.electron.ipcRenderer.once(responseChannel, (response: object) => {
       resolve(response as Res);
     });
+    console.log('sending to main', channel, request);
     window.electron.ipcRenderer.sendMessage(channel, {
       respondTo: responseChannel,
       request,

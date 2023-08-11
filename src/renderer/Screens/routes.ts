@@ -4,6 +4,7 @@ export enum AppRoute {
   ONBOARDING_AUTHENTICATE = '/onboarding/authenticate',
   ONBOARDING_SELECT_DIR = '/onboarding/select-directory',
   RECORDINGS_LIST = '/recordings-list',
+  PLUGINS = '/plugins',
 }
 
 export function startRoute(prefs: IPersistedPreferences): AppRoute {
@@ -13,5 +14,5 @@ export function startRoute(prefs: IPersistedPreferences): AppRoute {
   if (prefs.recordingsDir === null) {
     return AppRoute.ONBOARDING_SELECT_DIR;
   }
-  return AppRoute.RECORDINGS_LIST;
+  return AppRoute.PLUGINS;
 }

@@ -1,7 +1,7 @@
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 import {Provider, useDispatch} from 'react-redux';
 import './App.css';
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {configuredStore} from './store';
 import AuthenticateScreen from './Screens/Onboarding/Authenticate';
 import SelectDirectory from './Screens/Onboarding/SelectDirectory';
@@ -9,11 +9,18 @@ import {AppRoute} from './Screens/routes';
 import usePreferencesLoader from './hooks/preferencesLoader';
 import {RecordingsList} from './Screens/Recordings/RecordingsList';
 import RecordingLocalManager from './backend/RecordingLocalManager';
+import {PluginsScreen} from './Screens/Plugins/PluginsScreen';
+import { usePluginManifestsLoader } from "./hooks/pluginManifestsLoader";
 
 const store = configuredStore();
 
 function PreferencesLoader() {
   usePreferencesLoader();
+  return null;
+}
+
+function PluginManifestsLoader() {
+  usePluginManifestsLoader();
   return null;
 }
 
@@ -32,9 +39,10 @@ export default function App() {
       <div className="base-container">
         <Router>
           <PreferencesLoader />
+          <PluginManifestsLoader />
           <ProxyMainToDispatch />
           <Routes>
-            <Route path="/" element={<AuthenticateScreen />} />
+            <Route path="/" element={<PluginsScreen />} />
             <Route
               path={AppRoute.RECORDINGS_LIST}
               element={<RecordingsList />}
@@ -47,6 +55,7 @@ export default function App() {
               path={AppRoute.ONBOARDING_AUTHENTICATE}
               element={<AuthenticateScreen />}
             />
+            <Route path={AppRoute.PLUGINS} element={<PluginsScreen />} />
           </Routes>
         </Router>
       </div>

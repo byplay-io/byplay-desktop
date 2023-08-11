@@ -5,10 +5,13 @@ import {subscribeMainToRenderer} from '../main/services/ipcCommunicationMain';
 import {IPCChannel} from '../types/ipc';
 import {subscribeAxiosProxy} from '../main/services/axiosProxy';
 import RecordingLocalManagerIPC from '../main/services/RecordingLocalManagerIPC';
+import PluginsIPC from '../main/services/plugins/PluginsIPC';
 
 export default function subscribeMainListeners() {
   PreferencesIPC.subscribe();
   RecordingLocalManagerIPC.subscribe();
+
+  PluginsIPC.subscribe();
 
   subscribeAxiosProxy();
 

@@ -7,12 +7,15 @@ import {
   setRecordingsDirPath,
 } from '../../state/recordings';
 import {AppRoute} from '../routes';
+import Preferences from '../../backend/Preferences';
 
 function FolderSelector() {
   const dispatch = useDispatch();
   const dir = useSelector(selectRecordingsDirPath);
   const saveDir = useCallback(() => {
-    dispatch(setRecordingsDirPath('/Users/vadim/projects/byplay/recordings'));
+    const d = '/Users/vadim/projects/byplay/recordings';
+    dispatch(setRecordingsDirPath(d));
+    void Preferences.set('recordingsDir', d);
   }, [dispatch]);
 
   const navigate = useNavigate();

@@ -11,7 +11,7 @@ import {IPCChannel} from '../../types/ipc';
 
 type Resp<T> = Promise<IByplayAPIResponse<T>>;
 
-async function makeRequest<T>(req: AxiosRequestConfig) {
+export async function makeRequest<T>(req: AxiosRequestConfig) {
   const res = await sendRendererToMain<AxiosRequestConfig, AxiosResponse<T>>(
     IPCChannel.AXIOS_REQUEST,
     req,

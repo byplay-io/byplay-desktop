@@ -1,4 +1,6 @@
 import {type IByplayAPIResponseRecordingLinks} from './byplayAPI';
+import {type IByplayPluginManifest} from './plugins';
+import {type IPackageInstallStatus} from '../main/services/plugins/ByplayPluginPackageInstaller';
 
 export enum IPCChannel {
   PREFERENCES_READ = 'preferences-read',
@@ -10,6 +12,8 @@ export enum IPCChannel {
   RECORDING_OPEN = 'recording-open',
   RECORDING_DOWNLOAD_AND_EXTRACT = 'recording-download-and-extract',
   RECORDING_IS_EXTRACTED = 'recording-is-extracted',
+
+  PLUGIN_INSTALL = 'plugin-install',
 }
 
 export interface MessageM2RRecordingProcessProgress {
@@ -50,4 +54,14 @@ export interface IRecordingManager {
   openInBlender: () => void;
   openVideo: () => void;
   isExtracted: () => Promise<boolean>;
+}
+
+export interface IPluginInstallRequest {
+  manifest: IByplayPluginManifest;
+}
+
+export interface IPluginInstallResponse {
+  success: boolean;
+  docsLink: string | null;
+  messages: string[];
 }
