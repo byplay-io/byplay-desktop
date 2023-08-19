@@ -1,0 +1,27 @@
+
+.plugin-tile {
+  border-radius: 30px;
+  background-color: #01020E;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.plugin-tile:hover {
+  @apply bg-primary;
+}
+
+.plugin-install-button {
+  @apply bg-primary text-light2 w-[172px] h-[56px] flex-row flex justify-center items-center text-center;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+
+.plugin-install-button:hover {
+  @apply bg-primary-lighter;
+}
+
+.plugin-install-button img {
+  @apply mr-3;
+}

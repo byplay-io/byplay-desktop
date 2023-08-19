@@ -15,7 +15,6 @@ function FolderSelector() {
   const saveDir = useCallback(() => {
     const d = '/Users/vadim/projects/byplay/recordings';
     dispatch(setRecordingsDirPath(d));
-    void Preferences.set('recordingsDir', d);
   }, [dispatch]);
 
   const navigate = useNavigate();

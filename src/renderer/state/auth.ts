@@ -1,6 +1,6 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
+import {type RootState} from '../store';
 // eslint-disable-next-line import/no-cycle
-import {type RootState} from '../../store';
 
 export interface TmpSignInCode {
   code: string;
@@ -44,6 +44,6 @@ export default auth.reducer;
 
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectIsAuthorized = (state: RootState) =>
-  !!state.auth.accessToken;
+  state.auth.accessToken !== null;
 export const selectTmpSignInCode = (state: RootState) =>
   state.auth.tmpSignInCode;

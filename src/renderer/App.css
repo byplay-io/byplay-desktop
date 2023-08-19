@@ -92,3 +92,7 @@ button.filter-button.active {
 .view-button.active {
   @apply p-2 opacity-100;
 }
+
+.navigation-link:hover {
+  @apply underline;
+}

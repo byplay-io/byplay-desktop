@@ -10,7 +10,8 @@ import usePreferencesLoader from './hooks/preferencesLoader';
 import {RecordingsList} from './Screens/Recordings/RecordingsList';
 import RecordingLocalManager from './backend/RecordingLocalManager';
 import {PluginsScreen} from './Screens/Plugins/PluginsScreen';
-import { usePluginManifestsLoader } from "./hooks/pluginManifestsLoader";
+import {usePluginManifestsLoader} from './hooks/pluginManifestsLoader';
+import {PluginDetailsScreen} from './Screens/Plugins/PluginDetailsScreen';
 
 const store = configuredStore();
 
@@ -56,6 +57,10 @@ export default function App() {
               element={<AuthenticateScreen />}
             />
             <Route path={AppRoute.PLUGINS} element={<PluginsScreen />} />
+            <Route
+              path={AppRoute.PLUGIN_DETAILS}
+              element={<PluginDetailsScreen />}
+            />
           </Routes>
         </Router>
       </div>

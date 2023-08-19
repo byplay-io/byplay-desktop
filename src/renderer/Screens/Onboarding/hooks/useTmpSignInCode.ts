@@ -43,7 +43,6 @@ export default function useTmpSignInCode() {
   const rememberToken = useCallback(
     (accessToken: string, userId: string) => {
       dispatch(setAccessToken(accessToken));
-      void Preferences.setBatch({accessToken, userId});
       Analytics.registerUserEvent(
         AnalyticsUserEventType.TMP_SIGN_IN_TOKEN_ACTIVATED,
       );

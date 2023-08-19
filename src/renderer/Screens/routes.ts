@@ -5,6 +5,7 @@ export enum AppRoute {
   ONBOARDING_SELECT_DIR = '/onboarding/select-directory',
   RECORDINGS_LIST = '/recordings-list',
   PLUGINS = '/plugins',
+  PLUGIN_DETAILS = '/plugin/:pluginId',
 }
 
 export function startRoute(prefs: IPersistedPreferences): AppRoute {

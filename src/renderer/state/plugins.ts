@@ -1,42 +1,28 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import {type RootState} from '../store';
-import {type IByplayPluginManifest} from '../../types/plugins';
+import {type IByplayPluginManifest, type PluginType} from '../../types/plugins';
 
 export interface PluginsState {
   manifests: IByplayPluginManifest[] | null;
-  installedHoudiniPluginVersion: string | null;
-  installedBlenderPluginVersion: string | null;
-  installedC4DPluginVersion: string | null;
+  installedPluginVersions: Partial<Record<PluginType, string | null>>;
 }
 
 const initialState: PluginsState = {
   manifests: null,
-  installedHoudiniPluginVersion: null,
-  installedC4DPluginVersion: null,
-  installedBlenderPluginVersion: null,
+  installedPluginVersions: {},
 };
 
 const plugins = createSlice({
   name: 'plugins',
   initialState,
   reducers: {
-    setInstalledHoudiniPluginVersion: (
+    setInstalledPluginVersion: (
       state,
-      action: PayloadAction<string>,
+      action: PayloadAction<{pluginType: PluginType; version: string}>,
     ) => {
-      state.installedHoudiniPluginVersion = action.payload;
-    },
-
-    setInstalledC4DPluginVersion: (state, action: PayloadAction<string>) => {
-      state.installedC4DPluginVersion = action.payload;
-    },
-
-    setInstalledBlenderPluginVersion: (
-      state,
-      action: PayloadAction<string>,
-    ) => {
-      state.installedBlenderPluginVersion = action.payload;
+      const {pluginType, version} = action.payload;
+      state.installedPluginVersions[pluginType] = version;
     },
 
     setPluginManifests: (
@@ -48,21 +34,12 @@ const plugins = createSlice({
   },
 });
 
-export const {
-  setInstalledHoudiniPluginVersion,
-  setInstalledC4DPluginVersion,
-  setInstalledBlenderPluginVersion,
-  setPluginManifests,
-} = plugins.actions;
+export const {setInstalledPluginVersion, setPluginManifests} = plugins.actions;
 
 export default plugins.reducer;
 
-export const selectInstalledHoudiniPluginVersion = (state: RootState) =>
-  state.plugins.installedHoudiniPluginVersion;
-export const selectInstalledBlenderPluginVersion = (state: RootState) =>
-  state.plugins.installedBlenderPluginVersion;
-export const selectInstalledC4DPluginVersion = (state: RootState) =>
-  state.plugins.installedC4DPluginVersion;
+export const selectInstalledPluginVersions = (state: RootState) =>
+  state.plugins.installedPluginVersions;
 
 export const selectPluginManifests = (state: RootState) =>
   state.plugins.manifests;
