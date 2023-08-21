@@ -22,51 +22,53 @@ export default class RecordingLocalManager implements IRecordingManager {
   settings: RecordingManagerSettings;
 
   static subscribeProxyToDispatch(dispatch: Dispatch<any>) {
-    const unsubProgress = subscribeRenderFromMain(
-      'recording-process-progress',
-      (msg: MessageM2RRecordingProcessProgress['payload']) => {
-        if (msg.processType === 'download') {
-          dispatch(
-            setRecordingStatusDownloading({
-              recordingId: msg.recordingId,
-              downloadProgress: {total: msg.total, downloaded: msg.done},
-            }),
-          );
-        }
-        if (msg.processType === 'extract') {
-          dispatch(
-            setRecordingStatusExtracting({
-              recordingId: msg.recordingId,
-              extractedFrames: msg.done,
-            }),
-          );
-        }
-      },
-    );
-
-    const unsubStatus = subscribeRenderFromMain(
-      'recording-process-status',
-      (msg: MessageM2RRecordingProcessStatus['payload']) => {
-        if (msg.processType === 'download') {
-          if (msg.status === 'done') {
-            dispatch(setRecordingStatusDownloaded(msg.recordingId));
-          }
-          if (msg.status === 'started') {
+    const unsubProgress =
+      subscribeRenderFromMain<MessageM2RRecordingProcessProgress>(
+        'recording-process-progress',
+        (msg: MessageM2RRecordingProcessProgress['payload']) => {
+          if (msg.processType === 'download') {
             dispatch(
               setRecordingStatusDownloading({
                 recordingId: msg.recordingId,
-                downloadProgress: {total: -1, downloaded: 0},
+                downloadProgress: {total: msg.total, downloaded: msg.done},
               }),
             );
           }
-        }
-        if (msg.processType === 'extract') {
-          if (msg.status === 'done') {
-            dispatch(setRecordingStatusExtracted(msg.recordingId));
+          if (msg.processType === 'extract') {
+            dispatch(
+              setRecordingStatusExtracting({
+                recordingId: msg.recordingId,
+                extractedFrames: msg.done,
+              }),
+            );
           }
-        }
-      },
-    );
+        },
+      );
+
+    const unsubStatus =
+      subscribeRenderFromMain<MessageM2RRecordingProcessStatus>(
+        'recording-process-status',
+        (msg: MessageM2RRecordingProcessStatus['payload']) => {
+          if (msg.processType === 'download') {
+            if (msg.status === 'done') {
+              dispatch(setRecordingStatusDownloaded(msg.recordingId));
+            }
+            if (msg.status === 'started') {
+              dispatch(
+                setRecordingStatusDownloading({
+                  recordingId: msg.recordingId,
+                  downloadProgress: {total: -1, downloaded: 0},
+                }),
+              );
+            }
+          }
+          if (msg.processType === 'extract') {
+            if (msg.status === 'done') {
+              dispatch(setRecordingStatusExtracted(msg.recordingId));
+            }
+          }
+        },
+      );
     return () => {
       console.log('RecordingLocalManager.unsubscribeProxyToDispatch');
       unsubProgress();

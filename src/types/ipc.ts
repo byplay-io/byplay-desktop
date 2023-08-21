@@ -12,6 +12,8 @@ export enum IPCChannel {
   RECORDING_DOWNLOAD_AND_EXTRACT = 'recording-download-and-extract',
   RECORDING_IS_EXTRACTED = 'recording-is-extracted',
 
+  DOWNLOAD_FFMPEG = 'download-ffmpeg',
+
   PLUGIN_INSTALL = 'plugin-install',
 
   CHOOSE_DIRECTORY = 'choose-directory',
@@ -36,7 +38,16 @@ export interface MessageM2RRecordingProcessStatus {
   };
 }
 
+export interface MessageFFMPEGDownloadStatus {
+  channel: 'ffmpeg-download-progress';
+  payload: {
+    total: number;
+    downloaded: number;
+  };
+}
+
 export type MessageM2R =
+  | MessageFFMPEGDownloadStatus
   | MessageM2RRecordingProcessProgress
   | MessageM2RRecordingProcessStatus;
 

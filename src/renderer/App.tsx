@@ -1,5 +1,5 @@
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import './App.css';
 import React, {useEffect} from 'react';
 import {configuredStore} from './store';
@@ -8,12 +8,23 @@ import RecordingLocalManager from './backend/RecordingLocalManager';
 import {usePluginManifestsLoader} from './hooks/pluginManifestsLoader';
 import Menu from './Screens/Menu/Menu';
 import AppRoutes from './AppRoutes';
+import {subscribeRenderFromMain} from '../utils/ipcCommunication';
+import {type MessageFFMPEGDownloadStatus} from '../types/ipc';
+import {
+  selectFfmpegPath,
+  selectFfmpegProgress,
+  setFFMPEGProgress,
+} from './state/ffmpeg';
+import useFFMPEGDownloader from './hooks/ffmpegDownloader';
 
 const store = configuredStore();
 
-function PreferencesLoader() {
-  usePreferencesLoader();
-  return null;
+function PreferencesLoader({children}: {children: React.ReactNode}) {
+  const loaded = usePreferencesLoader();
+  if (!loaded) {
+    return null;
+  }
+  return children;
 }
 
 function PluginManifestsLoader() {
@@ -31,7 +42,32 @@ function ProxyMainToDispatch() {
 }
 
 function FFMpegDownloader() {
-  useEffect(() => {}, []);
+  const dispatch = useDispatch();
+  const ffmpegPath = useSelector(selectFfmpegPath);
+  const ffmpegProgress = useSelector(selectFfmpegProgress);
+  useEffect(() => {
+    return subscribeRenderFromMain<MessageFFMPEGDownloadStatus>(
+      'ffmpeg-download-progress',
+      ({total, downloaded}) => {
+        const percentage = Math.floor((downloaded / total) * 100);
+        console.log('ffmpeg download progress', percentage);
+        dispatch(setFFMPEGProgress(percentage));
+      },
+    );
+  }, [dispatch]);
+
+  const needToDownload = ffmpegPath === null && ffmpegProgress === null;
+
+  const downloadFfmpeg = useFFMPEGDownloader();
+
+  console.log({ffmpegPath, ffmpegProgress, needToDownload});
+
+  useEffect(() => {
+    if (needToDownload) {
+      console.log('need to download ffmpeg');
+      void downloadFfmpeg();
+    }
+  }, [downloadFfmpeg, needToDownload]);
   return null;
 }
 
@@ -40,12 +76,13 @@ export default function App() {
     <Provider store={store}>
       <div className="base-container">
         <Router>
-          <PreferencesLoader />
-          <PluginManifestsLoader />
-          <FFMpegDownloader />
-          <ProxyMainToDispatch />
-          <Menu />
-          <AppRoutes />
+          <PreferencesLoader>
+            <PluginManifestsLoader />
+            <FFMpegDownloader />
+            <ProxyMainToDispatch />
+            <Menu />
+            <AppRoutes />
+          </PreferencesLoader>
         </Router>
       </div>
     </Provider>

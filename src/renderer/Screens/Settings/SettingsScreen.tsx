@@ -14,7 +14,7 @@ export default function SettingsScreen() {
 
   const signOut = async () => {
     dispatch(setEmptyAccessToken());
-    await Preferences.set('accessToken', null);
+    await Preferences.setBatch({accessToken: null, recordingsDir: null});
     navigate(AppRoute.ONBOARDING_AUTHENTICATE);
   };
   return (

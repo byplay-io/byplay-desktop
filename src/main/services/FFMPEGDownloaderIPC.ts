@@ -3,20 +3,43 @@ import fs from 'fs';
 import {app} from 'electron';
 import streamDownload from './streamDownload';
 import {getPlatform, Platform} from './platformHelpers';
+import {
+  sendMainToRenderer,
+  subscribeMainToRenderer,
+} from './ipcCommunicationMain';
+import {IPCChannel} from '../../types/ipc';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mv = require('mv');
 
-const FFMPEGDownloader = {
+function sendProgress(total: number, downloaded: number) {
+  sendMainToRenderer('ffmpeg-download-progress', {
+    total,
+    downloaded,
+  });
+}
+
+const FFMPEGDownloaderIPC = {
   isDownloaded() {
     return fs.existsSync(this.getTargetPath());
+  },
+
+  subscribe() {
+    subscribeMainToRenderer<null, string>(
+      IPCChannel.DOWNLOAD_FFMPEG,
+      async () => {
+        return this.download(sendProgress);
+      },
+    );
   },
 
   async download(
     onProgress: (total: number, downloaded: number) => void,
   ): Promise<string> {
     const newPath = this.getTargetPath();
+    console.log('Downloading ffmpeg to', newPath);
     if (this.isDownloaded()) {
+      console.log('already there', newPath);
       return newPath;
     }
 
@@ -58,4 +81,4 @@ const FFMPEGDownloader = {
   },
 };
 
-export default FFMPEGDownloader;
+export default FFMPEGDownloaderIPC;

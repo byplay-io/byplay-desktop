@@ -1,13 +1,13 @@
-import {IPCChannel} from '../types/ipc';
+import {IPCChannel, type MessageM2R} from '../types/ipc';
 
 let reqCountRendererToMain = 0;
 
-export function subscribeRenderFromMain<Msg>(
-  channel: string,
-  handler: (request: Msg) => void,
+export function subscribeRenderFromMain<Msg extends MessageM2R>(
+  channel: Msg['channel'],
+  handler: (request: Msg['payload']) => void,
 ) {
   return window.electron.ipcRenderer.on(channel, (msg) => {
-    handler(msg as Msg);
+    handler(msg as Msg['payload']);
   });
 }
 

@@ -9,8 +9,12 @@ import {
 import {AppRoute} from '../routes';
 import Preferences from '../../backend/Preferences';
 import {SelectRecordingDir} from '../../components/SelectRecordingDir';
+import {selectFfmpegPath, selectFfmpegProgress} from '../../state/ffmpeg';
 
 export default function SelectDirectory() {
+  const dirPath = useSelector(selectRecordingsDirPath);
+  const ffmpegPath = useSelector(selectFfmpegPath);
+  const ffmpegProgress = useSelector(selectFfmpegProgress);
   return (
     <div className="flex flex-grow flex-col">
       <OnboardingHeader status="" />
@@ -28,6 +32,12 @@ export default function SelectDirectory() {
       </div>
 
       <SelectRecordingDir withContinueButton />
+
+      {dirPath !== null && ffmpegPath === null && (
+        <div className="mt-10 text-red">
+          Downloading FFMPEG: {ffmpegProgress}%, please wait for it to complete
+        </div>
+      )}
     </div>
   );
 }

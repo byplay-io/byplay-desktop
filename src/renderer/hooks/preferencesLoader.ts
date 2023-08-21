@@ -132,5 +132,5 @@ export default function usePreferencesLoader() {
     'c4dPluginVersion',
   );
 
-  return null;
+  return loaded;
 }
