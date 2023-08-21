@@ -5,14 +5,17 @@ export enum AppRoute {
   ONBOARDING_SELECT_DIR = '/onboarding/select-directory',
   RECORDINGS_LIST = '/recordings-list',
   PLUGINS = '/plugins',
-  PLUGIN_DETAILS = '/plugin/:pluginId',
+  PLUGIN_DETAILS = '/plugins/:pluginId',
+  HELP_SUPPORT = '/help-support',
+  SETTINGS = '/settings',
 }
 
 export function startRoute(prefs: IPersistedPreferences): AppRoute {
+  console.log(prefs);
   if (prefs.accessToken === null) {
     return AppRoute.ONBOARDING_AUTHENTICATE;
   }
-  if (prefs.recordingsDir === null) {
+  if (prefs.recordingsDir === null || prefs.ffmpegPath === null) {
     return AppRoute.ONBOARDING_SELECT_DIR;
   }
   return AppRoute.PLUGINS;

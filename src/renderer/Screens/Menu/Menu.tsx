@@ -1,6 +1,9 @@
 import {useLocation, useNavigate} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import {AppRoute} from '../routes';
 import {HelpIcon, HomeIcon, PluginsIcon, SettingsIcon} from './Iconts';
+import {selectRecordingsDirPath} from '../../state/recordings';
+import {selectAccessToken} from '../../state/auth';
 
 function MenuItem(props: {
   name: string;
@@ -10,7 +13,7 @@ function MenuItem(props: {
   const path = useLocation();
 
   const {name, link, children} = props;
-  const active = path.pathname === link;
+  const active = path.pathname.startsWith(link);
   const navigate = useNavigate();
   return (
     <a
@@ -28,6 +31,11 @@ function MenuItem(props: {
 }
 
 export default function Menu() {
+  const path = useLocation();
+  if (path.pathname.startsWith('/onboarding')) {
+    return null;
+  }
+
   return (
     <div className="menu-container">
       <div className="menu-expanded-width">
@@ -37,10 +45,10 @@ export default function Menu() {
         <MenuItem name="Plugins" link={AppRoute.PLUGINS}>
           <PluginsIcon />
         </MenuItem>
-        <MenuItem name="Help & Support" link={AppRoute.PLUGINS}>
+        <MenuItem name="Help & Support" link={AppRoute.HELP_SUPPORT}>
           <HelpIcon />
         </MenuItem>
-        <MenuItem name="Settings" link={AppRoute.PLUGINS}>
+        <MenuItem name="Settings" link={AppRoute.SETTINGS}>
           <SettingsIcon />
         </MenuItem>
       </div>

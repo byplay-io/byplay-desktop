@@ -11,6 +11,8 @@ module.exports = {
       light2: '#EFF0FB',
       text: '#ffffff',
       red: '#E52020',
+      'red-muted-200': '#330707',
+      'red-muted-400': '#791010',
     },
     extend: {
       boxShadow: {

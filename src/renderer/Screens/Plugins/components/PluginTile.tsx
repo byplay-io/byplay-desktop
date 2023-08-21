@@ -18,7 +18,7 @@ export function PluginTile(props: {manifest: IByplayPluginManifest}) {
 
   const navigate = useNavigate();
   const onClick = () => {
-    navigate(`/plugin/${manifest.id}`);
+    navigate(`/plugins/${manifest.id}`);
   };
 
   return (

@@ -1,6 +1,5 @@
 import {type IByplayAPIResponseRecordingLinks} from './byplayAPI';
 import {type IByplayPluginManifest} from './plugins';
-import {type IPackageInstallStatus} from '../main/services/plugins/ByplayPluginPackageInstaller';
 
 export enum IPCChannel {
   PREFERENCES_READ = 'preferences-read',
@@ -14,6 +13,8 @@ export enum IPCChannel {
   RECORDING_IS_EXTRACTED = 'recording-is-extracted',
 
   PLUGIN_INSTALL = 'plugin-install',
+
+  CHOOSE_DIRECTORY = 'choose-directory',
 }
 
 export interface MessageM2RRecordingProcessProgress {

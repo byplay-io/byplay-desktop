@@ -6,11 +6,13 @@ export interface FfmpegState {
   path: null | string;
 }
 
+const initialState: FfmpegState = {
+  path: null,
+};
+
 const ffmpeg = createSlice({
   name: 'ffmpeg',
-  initialState: {
-    path: null,
-  } as FfmpegState,
+  initialState,
   reducers: {
     setFFMPEGPath: (state, action: PayloadAction<string>) => {
       state.path = action.payload;

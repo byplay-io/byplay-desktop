@@ -1,9 +1,9 @@
-import { platform } from 'os';
+import {platform} from 'os';
 
 export enum Platform {
-  MAC = "mac",
-  WINDOWS = "win",
-  LINUX = "linux"
+  MAC = 'mac',
+  WINDOWS = 'win',
+  LINUX = 'linux',
 }
 
 export function getPlatform(): Platform {
@@ -20,5 +20,5 @@ export function getPlatform(): Platform {
     case 'win32':
       return Platform.WINDOWS;
   }
-  throw "Unknown platform"
-};
+  throw 'Unknown platform';
+}

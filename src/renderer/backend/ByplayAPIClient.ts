@@ -23,7 +23,7 @@ export default class ByplayAPIClient {
   private readonly token: string | null;
   baseUrl = 'https://account.byplay.io';
 
-  constructor(token: string) {
+  constructor(token: string | null) {
     this.token = token;
   }
   //

@@ -16,6 +16,10 @@ h1 {
   @apply text-4xl font-bold py-8 text-primary;
 }
 
+h3 {
+  @apply text-xl py-4 text-light2;
+}
+
 ol {
   @apply list-decimal list-inside mx-4;
 }
@@ -114,7 +118,7 @@ button.filter-button.active {
 }
 
 .menu-container {
-  @apply absolute left-0 top-0 bottom-0 menu-collapsed-width bg-dark3 overflow-hidden pt-10;
+  @apply absolute left-0 top-0 bottom-0 menu-collapsed-width bg-dark3 overflow-hidden pt-[66px];
   transition: width 0.3s ease-in-out;
   z-index: 10;
 }
@@ -133,4 +137,8 @@ a.menu-item.active svg path {
 
 a.menu-item.active {
   @apply text-primary bg-dark1;
+}
+
+.select-record-dir-path {
+   @apply bg-dark2 border-primary border-2 flex-grow font-mono flex-row p-4 rounded-2xl w-[600px] max-w-[600px] overflow-hidden;
 }

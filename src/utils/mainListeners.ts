@@ -6,6 +6,7 @@ import {IPCChannel} from '../types/ipc';
 import {subscribeAxiosProxy} from '../main/services/axiosProxy';
 import RecordingLocalManagerIPC from '../main/services/RecordingLocalManagerIPC';
 import PluginsIPC from '../main/services/plugins/PluginsIPC';
+import {subscribeChooseDirectory} from '../main/services/chooseDirectory';
 
 export default function subscribeMainListeners() {
   PreferencesIPC.subscribe();
@@ -14,6 +15,8 @@ export default function subscribeMainListeners() {
   PluginsIPC.subscribe();
 
   subscribeAxiosProxy();
+
+  subscribeChooseDirectory();
 
   subscribeMainToRenderer<null, string>(
     IPCChannel.INFO_GET_APP_VERSION,

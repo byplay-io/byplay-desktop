@@ -8,43 +8,7 @@ import {
 } from '../../state/recordings';
 import {AppRoute} from '../routes';
 import Preferences from '../../backend/Preferences';
-
-function FolderSelector() {
-  const dispatch = useDispatch();
-  const dir = useSelector(selectRecordingsDirPath);
-  const saveDir = useCallback(() => {
-    const d = '/Users/vadim/projects/byplay/recordings';
-    dispatch(setRecordingsDirPath(d));
-  }, [dispatch]);
-
-  const navigate = useNavigate();
-  const continueToApp = useCallback(() => {
-    console.log('continueToApp');
-    navigate(AppRoute.RECORDINGS_LIST);
-  }, [navigate]);
-  return (
-    <div className="flex flex-row pt-10">
-      <div className="bg-dark2 border-primary border-2 flex-grow font-mono flex-row p-4 rounded-2xl">
-        /Users/vadim/projects/byplay/recordings
-      </div>
-      <button
-        type="button"
-        onClick={saveDir}
-        className="bg-primary border-primary border-2 ml-5 flex-row py-4 mr-4 px-8 rounded-2xl text-center"
-      >
-        Select
-      </button>
-      <button
-        disabled={dir === null}
-        onClick={continueToApp}
-        type="button"
-        className="border-primary border-2 text-primary flex-row ml-12 py-4 px-8 rounded-full text-center"
-      >
-        Continue →
-      </button>
-    </div>
-  );
-}
+import {SelectRecordingDir} from '../../components/SelectRecordingDir';
 
 export default function SelectDirectory() {
   return (
@@ -63,7 +27,7 @@ export default function SelectDirectory() {
         </div>
       </div>
 
-      <FolderSelector />
+      <SelectRecordingDir withContinueButton />
     </div>
   );
 }

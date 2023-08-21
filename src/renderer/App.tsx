@@ -3,16 +3,11 @@ import {Provider, useDispatch} from 'react-redux';
 import './App.css';
 import React, {useEffect} from 'react';
 import {configuredStore} from './store';
-import AuthenticateScreen from './Screens/Onboarding/Authenticate';
-import SelectDirectory from './Screens/Onboarding/SelectDirectory';
-import {AppRoute} from './Screens/routes';
 import usePreferencesLoader from './hooks/preferencesLoader';
-import {RecordingsList} from './Screens/Recordings/RecordingsList';
 import RecordingLocalManager from './backend/RecordingLocalManager';
-import {PluginsScreen} from './Screens/Plugins/PluginsScreen';
 import {usePluginManifestsLoader} from './hooks/pluginManifestsLoader';
-import {PluginDetailsScreen} from './Screens/Plugins/PluginDetailsScreen';
 import Menu from './Screens/Menu/Menu';
+import AppRoutes from './AppRoutes';
 
 const store = configuredStore();
 
@@ -35,6 +30,11 @@ function ProxyMainToDispatch() {
   return null;
 }
 
+function FFMpegDownloader() {
+  useEffect(() => {}, []);
+  return null;
+}
+
 export default function App() {
   return (
     <Provider store={store}>
@@ -42,28 +42,10 @@ export default function App() {
         <Router>
           <PreferencesLoader />
           <PluginManifestsLoader />
+          <FFMpegDownloader />
           <ProxyMainToDispatch />
           <Menu />
-          <Routes>
-            {/* <Route path="/" element={<PluginsScreen />} /> */}
-            <Route
-              path={AppRoute.RECORDINGS_LIST}
-              element={<RecordingsList />}
-            />
-            <Route
-              path={AppRoute.ONBOARDING_SELECT_DIR}
-              element={<SelectDirectory />}
-            />
-            <Route
-              path={AppRoute.ONBOARDING_AUTHENTICATE}
-              element={<AuthenticateScreen />}
-            />
-            <Route path={AppRoute.PLUGINS} element={<PluginsScreen />} />
-            <Route
-              path={AppRoute.PLUGIN_DETAILS}
-              element={<PluginDetailsScreen />}
-            />
-          </Routes>
+          <AppRoutes />
         </Router>
       </div>
     </Provider>

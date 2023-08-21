@@ -45,8 +45,9 @@ function RecordingDetails(props: {
 
 export default function RecordingConsole() {
   const {recording, status} = useSelector(selectHighlightedRecording);
+  console.log(recording, status);
 
-  if (recording == null || status == null) {
+  if (recording == null) {
     return <NothingSeleted />;
   }
   return <RecordingDetails recording={recording} status={status} />;

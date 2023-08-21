@@ -1,7 +1,7 @@
 import './Plugins.css';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
 import {type PluginType} from '../../../types/plugins';
 import {
@@ -13,6 +13,7 @@ import {PluginDetailsHeader} from './components/PluginDetailsHeader';
 import InstallPluginIcon from './components/assets/install-plugin.svg';
 import {AppRoute} from '../routes';
 import PluginRegistry from '../../backend/PluginRegistry';
+import AuthenticatedPageContainer from '../../components/AuthenticatedPageContainer';
 
 enum PluginStatus {
   INSTALLED,
@@ -83,7 +84,7 @@ export function PluginDetailsScreen() {
   );
 
   return (
-    <div className="authorized-page-container">
+    <AuthenticatedPageContainer>
       <a
         className="navigation-link"
         onClick={() => {
@@ -111,6 +112,6 @@ export function PluginDetailsScreen() {
           You have an older version installed: {installedPluginVersion}
         </div>
       )}
-    </div>
+    </AuthenticatedPageContainer>
   );
 }
