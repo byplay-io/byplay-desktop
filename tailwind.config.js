@@ -3,7 +3,6 @@ module.exports = {
     colors: {
       primary: '#2661FB',
       'primary-lighter': '#3da8ff',
-      'primary-muted': '#061321',
       dark1: '#061321',
       dark2: '#010A14',
       dark3: '#01020E',

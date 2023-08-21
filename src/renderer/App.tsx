@@ -12,6 +12,7 @@ import RecordingLocalManager from './backend/RecordingLocalManager';
 import {PluginsScreen} from './Screens/Plugins/PluginsScreen';
 import {usePluginManifestsLoader} from './hooks/pluginManifestsLoader';
 import {PluginDetailsScreen} from './Screens/Plugins/PluginDetailsScreen';
+import Menu from './Screens/Menu/Menu';
 
 const store = configuredStore();
 
@@ -42,8 +43,9 @@ export default function App() {
           <PreferencesLoader />
           <PluginManifestsLoader />
           <ProxyMainToDispatch />
+          <Menu />
           <Routes>
-            <Route path="/" element={<PluginsScreen />} />
+            {/* <Route path="/" element={<PluginsScreen />} /> */}
             <Route
               path={AppRoute.RECORDINGS_LIST}
               element={<RecordingsList />}

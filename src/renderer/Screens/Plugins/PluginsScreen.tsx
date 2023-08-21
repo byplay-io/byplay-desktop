@@ -10,7 +10,7 @@ export function PluginsScreen() {
   const manifests = useSelector(selectPluginManifests) ?? [];
 
   return (
-    <div>
+    <div className="authorized-page-container">
       <h1>Plugins</h1>
       <div className="flex flex-row">
         {manifests.map((manifest) => (

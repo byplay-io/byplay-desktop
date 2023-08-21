@@ -1,5 +1,5 @@
 import './Plugins.css';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {useState} from 'react';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
@@ -56,6 +56,9 @@ export function PluginDetailsScreen() {
   );
   const installedVersions = useSelector(selectInstalledPluginVersions);
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   if (manifest == null) {
     return <div>Plugin not found</div>;
   }
@@ -80,8 +83,13 @@ export function PluginDetailsScreen() {
   );
 
   return (
-    <div>
-      <a className="navigation-link" href={AppRoute.PLUGINS}>
+    <div className="authorized-page-container">
+      <a
+        className="navigation-link"
+        onClick={() => {
+          navigate(AppRoute.PLUGINS);
+        }}
+      >
         ← Back
       </a>
       <PluginDetailsHeader manifest={manifest} />

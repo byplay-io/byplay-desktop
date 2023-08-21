@@ -17,7 +17,7 @@ export function RecordingsList() {
   const [parent, enableAnimations] = useAutoAnimate();
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row authorized-page-container">
       <div className="bg-dark3 w-[700px]">
         <div>
           <h1 className="flex flex-row content-center">

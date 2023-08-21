@@ -26,6 +26,7 @@ module.exports = {
     'react/destructuring-assignment': 2,
     '@typescript-eslint/return-await': 'off',
     'no-restricted-syntax': 'off',
+    'react/require-default-props': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

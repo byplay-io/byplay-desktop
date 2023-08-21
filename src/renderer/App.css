@@ -5,7 +5,7 @@
 @tailwind variants;
 
 .base-container {
-  @apply min-h-screen h-full flex bg-dark1 text-light2 px-12 pt-12;
+  @apply min-h-screen h-full flex bg-dark2 text-light2 px-12 pt-12;
 }
 
 .helper-text {
@@ -41,11 +41,11 @@ li.list-marker {
 }
 
 .recording-grid-container.selected {
-  @apply bg-primary-muted;
+  /*@apply bg-primary-muted;*/
 }
 
 .recording-list-container.selected {
-  @apply bg-primary-muted;
+  /*@apply bg-primary-muted;*/
 }
 
 button.filter-button {
@@ -93,6 +93,44 @@ button.filter-button.active {
   @apply p-2 opacity-100;
 }
 
+.navigation-link {
+  @apply cursor-pointer;
+}
+
 .navigation-link:hover {
   @apply underline;
+}
+
+.authorized-page-container {
+  margin-left: 80px;
+}
+
+.menu-expanded-width {
+  @apply w-[250px];
+}
+
+.menu-collapsed-width {
+  @apply w-[76px];
+}
+
+.menu-container {
+  @apply absolute left-0 top-0 bottom-0 menu-collapsed-width bg-dark3 overflow-hidden pt-10;
+  transition: width 0.3s ease-in-out;
+  z-index: 10;
+}
+
+.menu-container:hover {
+  @apply menu-expanded-width;
+}
+
+a.menu-item {
+  @apply py-5 text-light1 cursor-pointer;
+}
+
+a.menu-item.active svg path {
+  fill: #2661FB;
+}
+
+a.menu-item.active {
+  @apply text-primary bg-dark1;
 }
