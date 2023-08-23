@@ -2,8 +2,18 @@ import {useSelector} from 'react-redux';
 import {
   RecordingNotStartedStatus,
   selectRecordingStatuses,
+  RecordingState,
 } from '../../../state/recordingsList';
-import {formatBytes, formatBytesProgress} from '../../../../utils/formatBytes';
+import {formatBytesProgress} from '../../../../utils/formatBytes';
+import CloudIcon from '../assets/cloud.svg';
+import CheckIcon from '../assets/check.svg';
+import CloudArrowDownIcon from '../assets/cloud-arrow-down.svg';
+
+const IconByStatus: Record<RecordingState, string> = {
+  [RecordingState.NOT_STARTED]: CloudIcon,
+  [RecordingState.IN_PROGRESS]: CloudArrowDownIcon,
+  [RecordingState.EXTRACTED]: CheckIcon,
+};
 
 export function RecordingStatus(props: {recordingId: string}) {
   const statuses = useSelector(selectRecordingStatuses);
@@ -12,13 +22,14 @@ export function RecordingStatus(props: {recordingId: string}) {
     recordingId in statuses ? statuses[recordingId] : RecordingNotStartedStatus;
 
   return (
-    <div className="bg-light1 text-dark1 absolute top-0">
-      {status.state} {status.extractedFrames}{' '}
-      {status.downloadProgress != null &&
-        formatBytesProgress(
-          status.downloadProgress.total,
-          status.downloadProgress.downloaded,
-        )}
+    <div className="absolute top-0">
+      <img src={IconByStatus[status.state]} alt={status.state} width={20} />
+      {/* {status.state} {status.extractedFrames}{' '} */}
+      {/* {status.downloadProgress != null && */}
+      {/*   formatBytesProgress( */}
+      {/*     status.downloadProgress.total, */}
+      {/*     status.downloadProgress.downloaded, */}
+      {/*   )} */}
     </div>
   );
 }

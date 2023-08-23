@@ -1,3 +1,4 @@
+import './RecordingsList.css';
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
@@ -15,12 +16,12 @@ export function RecordingsList() {
 
   const recordingsList = useSelector(selectRecordingsListFiltered);
 
-  const [parent, enableAnimations] = useAutoAnimate();
+  const parent = useAutoAnimate()[0];
 
   return (
     <AuthenticatedPageContainer>
-      <div className="flex flex-row authorized-page-container">
-        <div className="bg-dark3 w-[700px]">
+      <div className="flex flex-row">
+        <div className="bg-dark3 rounded-xl px-5 w-[700px]">
           <div>
             <h1 className="flex flex-row content-center">
               Videos
@@ -39,7 +40,7 @@ export function RecordingsList() {
             <RecordingListViewSelector />
           </div>
           <div
-            className="flex flex-row flex-wrap overflow-scroll h-[800px]"
+            className="flex flex-row flex-wrap overflow-scroll pt-5 h-[800px]"
             ref={parent}
           >
             {recordingsList.map(({id, recordingManifest, thumbnailUrl}) => (

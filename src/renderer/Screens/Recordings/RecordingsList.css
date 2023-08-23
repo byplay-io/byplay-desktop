@@ -1,0 +1,80 @@
+
+.recording-grid-image {
+  @apply w-[140px] h-[140px];
+}
+
+.recording-list-image {
+  @apply w-[80px] h-[80px];
+}
+
+.recording-container {
+  @apply border-dark2 border-2 hover:bg-muted;
+}
+
+.recording-container.selected {
+  @apply border-primary border-2 rounded-xl;
+}
+
+.recording-container.grid {
+  @apply w-[170px] rounded-xl;
+}
+
+.video-info-point {
+  @apply text-light2 w-[100px] mr-5;
+}
+
+.recording-grid-container.selected {
+  @apply border-muted border-2;
+}
+
+button.filter-button {
+  @apply rounded-full text-primary bg-dark1 font-bold text-sm px-4 py-2 border-2 border-dark1;
+}
+
+button.filter-button:hover {
+  @apply border-primary border-2;
+}
+
+button.filter-button.active {
+  @apply bg-primary text-light1 border-primary text-dark1;
+}
+
+.refresh-icon {
+  @apply w-10 h-10 cursor-pointer rounded-full;
+}
+
+.refresh-icon:hover {
+  @apply bg-primary rounded-full;
+}
+
+.refresh-icon.refreshing {
+  animation: rotateImg 1s linear infinite;
+}
+
+@keyframes rotateImg{
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.view-button {
+  @apply p-2 bg-dark2 opacity-50 cursor-pointer;
+}
+
+.view-button:hover {
+  @apply p-2 bg-dark2 opacity-80 cursor-pointer;
+}
+
+.view-button.active {
+  @apply p-2 opacity-100;
+}
+
+.recording-info-container {
+  @apply flex flex-col mt-5 text-light1;
+}
+.recording-info-container div {
+  @apply my-2 ml-2;
+}

@@ -11,5 +11,6 @@ export function formatBytes(bytes: number, decimals = 2) {
 }
 
 export function formatBytesProgress(totalBytes: number, readyBytes: number) {
+  if (totalBytes <= 0 || readyBytes <= 0) return '...';
   return `${formatBytes(readyBytes)} / ${formatBytes(totalBytes)}`;
 }

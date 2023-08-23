@@ -25,7 +25,7 @@ export function SelectRecordingDir(props: {withContinueButton?: boolean}) {
       <button
         type="button"
         onClick={chooseDir}
-        className="bg-primary items-center flex border-primary border-2 ml-5 flex-row py-4 mr-4 px-8 rounded-2xl text-center"
+        className="bg-primary hover:bg-primary-lighter text-dark1 items-center flex border-primary border-2 ml-5 flex-row py-4 mr-4 px-8 rounded-2xl text-center"
       >
         Select <img src={ChangeDirIcon} className="ml-2" />
       </button>
@@ -34,7 +34,7 @@ export function SelectRecordingDir(props: {withContinueButton?: boolean}) {
           disabled={dir === null || ffmpegPath === null}
           onClick={continueToApp}
           type="button"
-          className="border-primary border-2 text-primary flex-row ml-12 py-4 px-8 rounded-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-primary border-2 text-primary flex-row ml-12 py-4 px-8 hover:bg-muted rounded-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Continue →
         </button>

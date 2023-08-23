@@ -11,6 +11,8 @@ import {
 } from '../../../state/recordingsList';
 import formatDuration from '../../../../utils/formatDuration';
 import {RecordingStatus} from './RecordingStatus';
+import AudioEnabledIcon from '../assets/audio-enabled.svg';
+import AudioDisabledIcon from '../assets/audio-disabled.svg';
 
 function RecordingBoxGrid(props: {
   id: string;
@@ -25,7 +27,7 @@ function RecordingBoxGrid(props: {
   }, [id, dispatch]);
   return (
     <div
-      className={`recording-grid-container m-5 flex-col bg-dark2 p-3 cursor-pointer ${
+      className={`recording-container grid m-5 flex-col bg-dark2 p-3 cursor-pointer ${
         selected ? 'selected' : ''
       }`}
       onClick={setSelected}
@@ -53,7 +55,13 @@ function RecordingBoxList(props: {
   recordingManifest: RecordingManifestData;
 }) {
   const {id, recordingManifest, selected, thumbnailUrl} = props;
-  const {fps, framesCount} = recordingManifest;
+  const {fps, framesCount, videoSettings} = recordingManifest;
+  console.log(videoSettings);
+  const {audioEnabled} = videoSettings;
+  const resolution =
+    videoSettings?.screenResolution != null &&
+    videoSettings?.screenResolution.width > 0 &&
+    `${videoSettings?.screenResolution.width}x${videoSettings?.screenResolution.height}`;
   const duration = useMemo(
     () => formatDuration(framesCount, fps),
     [framesCount, fps],
@@ -65,7 +73,7 @@ function RecordingBoxList(props: {
   }, [id, dispatch]);
   return (
     <div
-      className={`recording-list-container w-full flex flex-row p-2 mb-5 cursor-pointer ${
+      className={`recording-container list hover:bg-dark1 w-full flex flex-row p-2 mb-5 cursor-pointer ${
         selected ? 'selected' : ''
       }`}
       onClick={setSelected}
@@ -82,7 +90,19 @@ function RecordingBoxList(props: {
         <div className="flex flex-col py-2">
           <div className="text-xl text-light1">{id}</div>
         </div>
-        <div className="text-muted">{duration}</div>
+        <div className="flex flex-row">
+          <div className="video-info-point">{duration}</div>
+          <div className="video-info-point">{fps}FPS</div>
+          <div className="video-info-point">
+            <img
+              className="w-6 h-6"
+              src={audioEnabled === true ? AudioEnabledIcon : AudioDisabledIcon}
+            />
+          </div>
+          {resolution !== false && (
+            <div className="video-info-point">{resolution}</div>
+          )}
+        </div>
       </div>
     </div>
   );

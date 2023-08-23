@@ -11,6 +11,10 @@ export interface RecordingManifestData {
     autoFocusLocked: boolean;
     whiteBalanceLocked: boolean;
     deviceRotation: 0 | 90 | 180;
+    screenResolution?: {
+      width: number;
+      height: number;
+    };
   } | null;
 }
 
