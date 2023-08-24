@@ -181,8 +181,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Byplay Desktop",
+    "appId": "io.byplay.desktop",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -225,6 +225,7 @@
       ]
     },
     "linux": {
+      "executableName": "byplay-desktop",
       "target": [
         "AppImage"
       ],
