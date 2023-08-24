@@ -16,7 +16,7 @@
 }
 
 .recording-container.grid {
-  @apply w-[170px] rounded-xl;
+  @apply w-[170px] rounded-xl h-[200px];
 }
 
 .video-info-point {

@@ -120,6 +120,7 @@ export default class RecordingLocalManager implements IRecordingManager {
   }
 
   openVideo(): void {
+    console.log('RecordingLocalManager.openVideo');
     this.open('video');
   }
 

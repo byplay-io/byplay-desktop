@@ -9,7 +9,7 @@ const videoUrl: Record<PluginType, string> = {
   [PluginType.Blender]:
     'https://storage.googleapis.com/byplay-website/standalone/blender_plugin_demo.mp4',
   [PluginType.Cinema4D]:
-    'https://storage.googleapis.com/byplay-website/standalone/c4d_plugin_demo.mov',
+    'https://storage.googleapis.com/byplay-website/standalone/c4d_plugin_demo.mp4',
 };
 
 export default function PluginHelp(props: {manifest: IByplayPluginManifest}) {

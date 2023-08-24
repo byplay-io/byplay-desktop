@@ -15,14 +15,14 @@ const IconByStatus: Record<RecordingState, string> = {
   [RecordingState.EXTRACTED]: CheckIcon,
 };
 
-export function RecordingStatus(props: {recordingId: string}) {
+export default function RecordingStatus(props: {recordingId: string}) {
   const statuses = useSelector(selectRecordingStatuses);
   const {recordingId} = props;
   const status =
     recordingId in statuses ? statuses[recordingId] : RecordingNotStartedStatus;
 
   return (
-    <div className="absolute top-0">
+    <div className="absolute top-0 right-0">
       <img src={IconByStatus[status.state]} alt={status.state} width={20} />
       {/* {status.state} {status.extractedFrames}{' '} */}
       {/* {status.downloadProgress != null && */}

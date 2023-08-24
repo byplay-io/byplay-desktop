@@ -13,9 +13,42 @@ import {useByplayAPI} from '../../../hooks/byplayAPI';
 import CheckIcon from '../assets/check.svg';
 import {formatBytesProgress} from '../../../../utils/formatBytes';
 import formatDuration from '../../../../utils/formatDuration';
+import formatResolution from '../../../../utils/formatResolution';
+import PlayIcon from '../assets/play.svg';
+import BlenderLogoIcon from '../assets/blender-logo-small.png';
 
 function NothingSelected() {
-  return <div>But select something!</div>;
+  return <div className="text-muted pt-10">← Select a recording</div>;
+}
+
+function OpenIn(props: {recording: IRecordingEntry}) {
+  const {recording} = props;
+  const {recordingManifest} = recording;
+  const {recordingId} = recordingManifest;
+  const recordingManager = useRecordingManager(recordingId);
+  const openBlender = () => {
+    recordingManager.openInBlender();
+  };
+
+  const openDir = () => {
+    recordingManager.openDir();
+  };
+  return (
+    <div className="flex flex-row mt-5">
+      <button
+        className="border-primary flex-grow mr-5 border-2 rounded-xl px-5 py-2 hover:bg-primary hover:text-dark2"
+        onClick={openDir}
+      >
+        Open Folder
+      </button>
+      <button
+        className="border-primary border-2 rounded-xl px-2 py-2 hover:bg-primary hover:text-dark2"
+        onClick={openBlender}
+      >
+        <img style={{height: 20}} src={BlenderLogoIcon} />
+      </button>
+    </div>
+  );
 }
 
 function RecordingInfo(props: {recording: IRecordingEntry}) {
@@ -24,17 +57,12 @@ function RecordingInfo(props: {recording: IRecordingEntry}) {
   const {recordingId, fps, framesCount, createdAtTimestamp, videoSettings} =
     recordingManifest;
   const {audioEnabled} = videoSettings ?? {audioEnabled: false};
-  const {width, height} = videoSettings?.screenResolution ?? {
-    width: 0,
-    height: 0,
-  };
-
   const date = useMemo(
     () => new Date(createdAtTimestamp).toLocaleString(),
     [createdAtTimestamp],
   );
   const duration = formatDuration(framesCount, fps);
-  const resolution = width > 0 && height > 0 ? `${width}x${height}` : null;
+  const resolution = formatResolution(recordingManifest);
 
   return (
     <div className="recording-info-container">
@@ -102,13 +130,13 @@ function RecordingStatusAndDownload(props: {
   };
 
   return (
-    <div className="min-h-[60px] flex flex-col items-center mb-5">
+    <div
+      className={`flex flex-col items-center mb-3 transition-all ${
+        status.state === RecordingState.EXTRACTED ? '' : 'h-[70px]'
+      }`}
+    >
       {status.state === RecordingState.NOT_STARTED && (
-        <button
-          type="button"
-          onClick={download}
-          className="bg-primary text-dark1 rounded-full hover:bg-primary-lighter font-bold cursor-pointer py-4 px-10"
-        >
+        <button type="button" onClick={download} className="big-primary-button">
           Download
         </button>
       )}
@@ -132,18 +160,45 @@ function RecordingDetails(props: {
 
   const parent = useAutoAnimate()[0];
 
+  const {recordingManifest} = recording;
+  const {recordingId} = recordingManifest;
+  const recordingManager = useRecordingManager(recordingId);
+
+  const openVideo = () => {
+    recordingManager.openVideo();
+  };
+
   return (
-    <div className="w-full px-5 bg-dark3 pt-5" ref={parent}>
+    <div className="w-full px-5 pt-5" ref={parent}>
       <div key={recording.id} className="w-full">
         <RecordingStatusAndDownload status={status} recording={recording} />
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center relative">
           <img
             src={recording.thumbnailUrl}
-            className="max-h-[200px] max-w-[300px]"
+            className="max-h-[200px] max-w-[250px]"
             alt={recording.id}
           />
+          {status.state === RecordingState.EXTRACTED && (
+            <div
+              className="absolute top-1/2 left-1/2 rounded-full bg-primary-opacity-20 hover:bg-primary-opacity-60 transition-all cursor-pointer"
+              onClick={openVideo}
+              style={{
+                marginLeft: -25,
+                marginTop: -25,
+                width: 50,
+                height: 50,
+                paddingLeft: 16,
+                paddingTop: 12,
+              }}
+            >
+              <img src={PlayIcon} />
+            </div>
+          )}
         </div>
         <RecordingInfo recording={recording} />
+        {status.state === RecordingState.EXTRACTED && (
+          <OpenIn recording={recording} />
+        )}
       </div>
     </div>
   );
@@ -151,10 +206,9 @@ function RecordingDetails(props: {
 
 export default function RecordingConsole() {
   const {recording, status} = useSelector(selectHighlightedRecording);
-  console.log(recording, status);
 
   return (
-    <div className="bg-dark3 rounded-xl ml-10 w-[300px] flex flex-col items-center">
+    <div className="bg-dark4 rounded-xl ml-5 mb-5 w-[280px] flex flex-col items-center">
       {recording == null ? (
         <NothingSelected />
       ) : (

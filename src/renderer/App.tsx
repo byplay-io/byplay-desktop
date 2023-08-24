@@ -1,7 +1,8 @@
-import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
+import {MemoryRouter as Router} from 'react-router-dom';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import './App.css';
 import React, {useEffect} from 'react';
+import * as Sentry from '@sentry/electron';
 import {configuredStore} from './store';
 import usePreferencesLoader from './hooks/preferencesLoader';
 import RecordingLocalManager from './backend/RecordingLocalManager';
@@ -70,6 +71,10 @@ function FFMpegDownloader() {
   }, [downloadFfmpeg, needToDownload]);
   return null;
 }
+
+Sentry.init({
+  dsn: 'https://e3d32ad930b7730eee863df272c57bd1@o244219.ingest.sentry.io/4505759397052416',
+});
 
 export default function App() {
   return (

@@ -10,9 +10,10 @@ import {
   setHighlightedRecordingId,
 } from '../../../state/recordingsList';
 import formatDuration from '../../../../utils/formatDuration';
-import {RecordingStatus} from './RecordingStatus';
+import RecordingStatus from './RecordingStatus';
 import AudioEnabledIcon from '../assets/audio-enabled.svg';
 import AudioDisabledIcon from '../assets/audio-disabled.svg';
+import formatResolution from '../../../../utils/formatResolution';
 
 function RecordingBoxGrid(props: {
   id: string;
@@ -56,12 +57,8 @@ function RecordingBoxList(props: {
 }) {
   const {id, recordingManifest, selected, thumbnailUrl} = props;
   const {fps, framesCount, videoSettings} = recordingManifest;
-  console.log(videoSettings);
   const {audioEnabled} = videoSettings;
-  const resolution =
-    videoSettings?.screenResolution != null &&
-    videoSettings?.screenResolution.width > 0 &&
-    `${videoSettings?.screenResolution.width}x${videoSettings?.screenResolution.height}`;
+  const resolution = formatResolution(recordingManifest);
   const duration = useMemo(
     () => formatDuration(framesCount, fps),
     [framesCount, fps],

@@ -144,7 +144,7 @@ export default class RecordingLocalManagerIPC implements IRecordingManager {
   }
 
   private static openItem(path: string) {
-    void shell.openExternal(path);
+    void shell.openExternal(`file://${path}`);
   }
 
   private emitProcessStatus(

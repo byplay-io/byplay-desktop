@@ -1,12 +1,12 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import * as Sentry from '@sentry/electron';
 import {
   selectTmpSignInCode,
   setAccessToken,
   setTmpSignInCode,
 } from '../../../state/auth';
-import Preferences from '../../../backend/Preferences';
 import {Analytics, AnalyticsUserEventType} from '../../../backend/Amplitude';
 import {useByplayAPI} from '../../../hooks/byplayAPI';
 import {AppRoute} from '../../routes';
@@ -47,6 +47,7 @@ export default function useTmpSignInCode() {
         AnalyticsUserEventType.TMP_SIGN_IN_TOKEN_ACTIVATED,
       );
       Analytics.setUserId(userId);
+      Sentry.setUser({id: userId});
 
       navigate(AppRoute.ONBOARDING_SELECT_DIR);
     },

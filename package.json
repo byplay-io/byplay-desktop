@@ -83,6 +83,7 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.7.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@sentry/electron": "^4.10.0",
     "@sentry/react": "^7.61.1",
     "@types/react-redux": "^7.1.25",
     "@types/redux-logger": "^3.0.9",

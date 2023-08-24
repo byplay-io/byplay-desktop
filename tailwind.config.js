@@ -5,6 +5,7 @@ const colors = {
   dark1: '#0b150e',
   dark2: '#041502',
   dark3: '#010E02',
+  dark4: '#06230b',
   light1: '#eeeeee',
   light2: '#d5d5d5',
   text: '#ffffff',
@@ -16,10 +17,13 @@ module.exports = {
   theme: {
     colors: {
       primary: '#00C792',
+      'primary-opacity-20': 'rgba(0,199,146,0.2)',
+      'primary-opacity-60': 'rgba(0,199,146,0.6)',
       'primary-lighter': '#00e3a7',
       dark1: colors.dark1,
       dark2: colors.dark2,
       dark3: colors.dark3,
+      dark4: colors.dark4,
       muted: '#004d38',
       light1: colors.light1,
       light2: colors.light2,
