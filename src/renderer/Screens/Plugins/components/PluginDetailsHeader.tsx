@@ -15,7 +15,7 @@ const headerIcons = {
 export function PluginDetailsHeader(props: {manifest: IByplayPluginManifest}) {
   const {manifest} = props;
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row mt-5">
       <img src={headerIcons[manifest.id]} className="plugin-header" />
       <div className="flex flex-col pt-5">
         <div className="text-2xl">{manifest.humanName}</div>

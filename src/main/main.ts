@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import {app, BrowserWindow, shell, ipcMain} from 'electron';
+import {app, BrowserWindow, shell, ipcMain, net, protocol} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -49,6 +49,17 @@ if (isDebug) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('electron-debug')();
 }
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'fbx',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+    },
+  },
+]);
 
 const installExtensions = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -146,6 +157,18 @@ app
     });
   })
   .catch(console.log);
+
+// app
+//   .whenReady()
+//   .then(() => {
+//     console.log('registering fbx protocol');
+//     protocol.handle('fbx', async (request) => {
+//       const url = `file:///${request.url.slice('fbx://'.length)}`;
+//       console.log('fbx', request.url, url);
+//       return net.fetch(url);
+//     });
+//   })
+//   .catch(console.error);
 
 app.on('ready', () => {
   // Modify the origin for all requests to the following urls.

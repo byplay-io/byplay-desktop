@@ -3,7 +3,10 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import React, {useState} from 'react';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
-import {type PluginType} from '../../../types/plugins';
+import {
+  type IByplayPluginManifest,
+  type PluginType,
+} from '../../../types/plugins';
 import {
   selectInstalledPluginVersions,
   selectPluginManifests,
@@ -14,6 +17,7 @@ import InstallPluginIcon from './components/assets/install-plugin.svg';
 import {AppRoute} from '../routes';
 import PluginRegistry from '../../backend/PluginRegistry';
 import AuthenticatedPageContainer from '../../components/AuthenticatedPageContainer';
+import PluginHelp from './components/PluginHelp';
 
 enum PluginStatus {
   INSTALLED,
@@ -95,17 +99,28 @@ export function PluginDetailsScreen() {
       </a>
       <PluginDetailsHeader manifest={manifest} />
 
-      <button type="button" onClick={install} className="plugin-install-button">
-        <img src={InstallPluginIcon} alt="install" />
-        {buttonText(status)}
-      </button>
+      <div className="flex flex-row w-full justify-between">
+        <div>
+          <button
+            type="button"
+            onClick={install}
+            className="big-primary-button"
+          >
+            <img src={InstallPluginIcon} alt="install" />
+            {buttonText(status)}
+          </button>
 
-      <div ref={messagesRef} className="mt-5">
-        {installMessages.map((message) => (
-          <div key={message} className="my-2">
-            <code key={message}>{message}</code>
+          <div ref={messagesRef} className="mt-5 max-w-[400px]">
+            {installMessages.map((message) => (
+              <div key={message} className="my-2">
+                <code key={message}>{message}</code>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div>
+          <PluginHelp manifest={manifest} />
+        </div>
       </div>
       {status === PluginStatus.UPDATE_AVAILABLE && (
         <div className="absolute bottom-10 right-10 bg-red shadow-red shadow-2xl-center rounded-full p-5">

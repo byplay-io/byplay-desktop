@@ -82,3 +82,22 @@ a.menu-item.active {
 .select-record-dir-path {
    @apply bg-dark2 border-primary border-2 flex-grow font-mono flex-row p-4 rounded-2xl w-[600px] max-w-[600px] overflow-hidden;
 }
+
+a.external-link {
+  @apply text-primary hover:text-primary-lighter underline;
+}
+
+.big-primary-button {
+  @apply bg-primary text-dark1 h-[56px] px-5 flex-row flex w-fit justify-center items-center text-center font-medium;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.big-primary-button:hover {
+  @apply bg-primary-lighter;
+}
+
+.big-primary-button img {
+  @apply mr-3;
+}

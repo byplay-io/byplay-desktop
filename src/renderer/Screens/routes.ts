@@ -11,7 +11,6 @@ export enum AppRoute {
 }
 
 export function startRoute(prefs: IPersistedPreferences): AppRoute {
-  console.log(prefs);
   if (prefs.accessToken === null) {
     return AppRoute.ONBOARDING_AUTHENTICATE;
   }
