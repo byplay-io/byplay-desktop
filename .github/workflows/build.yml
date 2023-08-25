@@ -26,7 +26,7 @@ jobs:
           echo '${{ secrets.mac_notarizing_api_key }}' > ~/private_keys/AuthKey_${{ secrets.mac_notarizing_api_key_id }}.p8
 
       - name: Build/release Electron app
-        uses: byplay-io/action-electron-builder@eb2bf61824786f0f88fc4bccfde57cd4d2f1f25f
+        uses: byplay-io/action-electron-builder@f7fe0595485bb258f705c8223cda87c22e00201b
         env:
           API_KEY_ID: ${{ secrets.mac_notarizing_api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.mac_notarizing_api_issuer_id }}
