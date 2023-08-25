@@ -1,12 +1,13 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "name": "byplay-desktop",
+  "productName": "Byplay Desktop",
+  "version": "2.0.0rc1",
+  "description": "Desktop client for Byplay Camera, allowing you to download shot videos and import them into a VFX package",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Vadim Lobanov & BYPLAY LLC",
+    "email": "vadim@byplay.io",
+    "url": "https://github.com/byplay-io"
   },
   "main": "./dist/main/main.js",
   "scripts": {
