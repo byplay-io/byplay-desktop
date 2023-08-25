@@ -1,35 +1,33 @@
 {
-  "description": "A foundation for scalable desktop apps",
+  "description": "Desktop client for Byplay Camera, allowing you to download shot videos and import them into a VFX package",
   "keywords": [
-    "electron",
-    "boilerplate",
-    "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
+    "vfx",
+    "3d",
+    "camera tracking",
+    "blender",
+    "houdini",
+    "c4d",
+    "byplay"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/byplay-io/byplay-desktop#readme",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "https://github.com/byplay-io/byplay-desktop/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/byplay-io/byplay-desktop.git"
   },
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Vadim Lobanov & BYPLAY LLC",
+    "email": "vadim@byplay.io",
+    "url": "https://github.com/byplay-io"
   },
   "contributors": [
     {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
+      "name": "Vadim Lobanov",
+      "email": "vadim@byplay.io",
+      "url": "https://github.com/vlobanov"
     }
   ],
   "main": "./src/main/main.ts",
@@ -241,12 +239,9 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "byplay-io",
+      "repo": "byplay-desktop"
     }
-  },
-  "collective": {
-    "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "devEngines": {
     "node": ">=14.x",
