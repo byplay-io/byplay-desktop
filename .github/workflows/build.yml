@@ -4,6 +4,7 @@ on: push
 jobs:
   release:
     runs-on: ${{ matrix.os }}
+    permissions: write-all
 
     strategy:
       matrix:
