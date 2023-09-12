@@ -12,7 +12,7 @@ import path from 'path';
 import {app, BrowserWindow, shell, ipcMain, protocol} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
-import * as Sentry from '@sentry/electron';
+import * as Sentry from '@sentry/electron/main';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import subscribeMainListeners from '../utils/mainListeners';
@@ -95,14 +95,15 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1100,
     height: 660,
     minWidth: 1100,
     minHeight: 660,
-    maxWidth: 1400,
+    maxWidth: 1560,
     maxHeight: 1200,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      devTools: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),

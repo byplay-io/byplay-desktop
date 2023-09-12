@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import * as Sentry from '@sentry/electron';
+import * as Sentry from '@sentry/electron/renderer';
 import {
   selectTmpSignInCode,
   setAccessToken,

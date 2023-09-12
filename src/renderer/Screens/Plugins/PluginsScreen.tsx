@@ -10,7 +10,20 @@ export function PluginsScreen() {
 
   return (
     <AuthenticatedPageContainer>
-      <h1>Plugins</h1>
+      <div className="flex flex-row justify-between items-center">
+        <h1>Plugins</h1>
+        <div className="mt-5 text-light1 text-sm text-light1">
+          Missing a plugin?{' '}
+          <a
+            href="https://discord.gg/Ru8YqFafQD"
+            target="_blank"
+            className="external-link mt-5"
+            rel="noreferrer"
+          >
+            Tell us on Discord
+          </a>
+        </div>
+      </div>
       <div className="mb-8 w-3/4">
         Plugins are essential part of Byplay. They set up the scene in your 3D
         software, import geometry with camera movement and set background image.
@@ -21,17 +34,6 @@ export function PluginsScreen() {
         ))}
       </div>
       <UseInAe />
-      <div className="mt-10">
-        Missing a plugin?{' '}
-        <a
-          href="https://discord.gg/Ru8YqFafQD"
-          target="_blank"
-          className="external-link mt-5"
-          rel="noreferrer"
-        >
-          Tell us on Discord
-        </a>
-      </div>
     </AuthenticatedPageContainer>
   );
 }

@@ -16,7 +16,7 @@ export default function SelectDirectory() {
   const ffmpegPath = useSelector(selectFfmpegPath);
   const ffmpegProgress = useSelector(selectFfmpegProgress);
   return (
-    <div className="flex flex-grow flex-col">
+    <div className="flex flex-grow flex-col mx-10">
       <OnboardingHeader status="" />
       <div className="flex flex-col pt-10">
         <div className="helper-text font-bold">Step 2 of 2</div>

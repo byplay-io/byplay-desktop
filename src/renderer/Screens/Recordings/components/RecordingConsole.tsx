@@ -10,7 +10,6 @@ import {
 import {useRecordingManager} from '../hooks/recordingManager';
 import {type IRecordingEntry} from '../../../../types/byplayAPI';
 import {useByplayAPI} from '../../../hooks/byplayAPI';
-import CheckIcon from '../assets/check.svg';
 import {formatBytesProgress} from '../../../../utils/formatBytes';
 import formatDuration from '../../../../utils/formatDuration';
 import formatResolution from '../../../../utils/formatResolution';
@@ -34,7 +33,7 @@ function OpenIn(props: {recording: IRecordingEntry}) {
     recordingManager.openDir();
   };
   return (
-    <div className="flex flex-row mt-5">
+    <div className="flex flex-row">
       <button
         className="border-primary flex-grow mr-5 border-2 rounded-xl px-5 py-2 hover:bg-primary hover:text-dark2"
         onClick={openDir}
@@ -88,32 +87,31 @@ function Progress(props: {status: IRecordingStatus; totalFrames: number}) {
   if (status.downloadState === ProcessState.IN_PROGRESS) {
     const {downloadProgress} = status;
     if (downloadProgress === undefined) {
-      return null;
+      return '...';
     }
-    return (
-      <div className="flex flex-row justify-center">
-        Downloading{' '}
-        {formatBytesProgress(
-          downloadProgress.total,
-          downloadProgress.downloaded,
-        )}
-      </div>
+    return formatBytesProgress(
+      downloadProgress.total,
+      downloadProgress.downloaded,
     );
   }
   if (status.extractState === ProcessState.IN_PROGRESS) {
     const {extractedFrames} = status;
     if (extractedFrames === undefined) {
-      return null;
+      return '...';
     }
     return (
-      <div className="flex flex-row justify-center">
-        Extracting: <b>{Math.floor((extractedFrames / totalFrames) * 100)}%</b>
-      </div>
+      <>
+        Extracting:{' '}
+        <b className="ml-1">
+          {Math.floor((extractedFrames / totalFrames) * 100)}%
+        </b>
+      </>
     );
   }
+  return '...';
 }
 
-function RecordingStatusAndDownload(props: {
+function RecordingActions(props: {
   status: IRecordingStatus;
   recording: IRecordingEntry;
 }) {
@@ -130,23 +128,27 @@ function RecordingStatusAndDownload(props: {
   };
 
   return (
-    <div
-      className={`flex flex-col items-center mb-3 transition-all ${
-        status.state === RecordingState.EXTRACTED ? '' : 'h-[70px]'
-      }`}
-    >
+    <div className="flex flex-col items-center my-3 transition-all">
       {status.state === RecordingState.NOT_STARTED && (
-        <button type="button" onClick={download} className="big-primary-button">
+        <button
+          className="border-primary border-2 rounded-xl px-5 py-2 bg-primary text-dark1 font-bold hover:bg-primary-lighter hover:text-dark2"
+          onClick={download}
+        >
           Download
         </button>
       )}
       {status.state === RecordingState.EXTRACTED && (
-        <div className="flex flex-row justify-center">
-          Ready <img src={CheckIcon} className="w-5 h-5" alt="extracted" />{' '}
-        </div>
+        <OpenIn recording={recording} />
       )}
       {status.state === RecordingState.IN_PROGRESS && (
-        <Progress status={status} totalFrames={recordingManifest.framesCount} />
+        <div className="border-2 border-dark3 bg-dark3 animate-pulse rounded-xl w-full py-2">
+          <div className="flex flex-row justify-center">
+            <Progress
+              status={status}
+              totalFrames={recordingManifest.framesCount}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
@@ -171,7 +173,6 @@ function RecordingDetails(props: {
   return (
     <div className="w-full px-5 pt-5" ref={parent}>
       <div key={recording.id} className="w-full">
-        <RecordingStatusAndDownload status={status} recording={recording} />
         <div className="w-full flex flex-col items-center relative">
           <img
             src={recording.thumbnailUrl}
@@ -195,10 +196,8 @@ function RecordingDetails(props: {
             </div>
           )}
         </div>
+        <RecordingActions status={status} recording={recording} />
         <RecordingInfo recording={recording} />
-        {status.state === RecordingState.EXTRACTED && (
-          <OpenIn recording={recording} />
-        )}
       </div>
     </div>
   );

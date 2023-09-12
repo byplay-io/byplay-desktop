@@ -14,7 +14,7 @@ export function SelectRecordingDir(props: {withContinueButton?: boolean}) {
 
   const navigate = useNavigate();
   const continueToApp = useCallback(() => {
-    navigate(AppRoute.RECORDINGS_LIST);
+    navigate(AppRoute.PLUGINS);
   }, [navigate]);
 
   const {withContinueButton} = props;

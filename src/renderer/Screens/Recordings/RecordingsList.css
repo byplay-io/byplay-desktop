@@ -73,8 +73,9 @@ button.filter-button.active {
 }
 
 .recording-info-container {
-  @apply flex flex-col mt-5 text-light1;
+  @apply flex flex-col mt-2 text-light1;
 }
+
 .recording-info-container div {
   @apply my-2 ml-2;
 }

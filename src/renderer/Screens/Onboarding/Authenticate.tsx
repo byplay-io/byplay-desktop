@@ -4,7 +4,7 @@ import useTmpSignInCode from './hooks/useTmpSignInCode';
 function AuthCode() {
   const code = useTmpSignInCode();
   return (
-    <div className="text-3xl font-mono text-primary m-14">
+    <div className="text-3xl font-mono text-primary ml-4">
       {code === null ? 'loading...' : code.code}
     </div>
   );
@@ -12,7 +12,7 @@ function AuthCode() {
 
 export default function AuthenticateScreen() {
   return (
-    <div className="flex flex-grow flex-col">
+    <div className="flex flex-grow flex-col mx-10">
       <OnboardingHeader status="waiting to authenticate" />
       <div className="flex flex-col pt-10">
         <div className="helper-text font-bold">Step 1 of 2</div>

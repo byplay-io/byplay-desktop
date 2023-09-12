@@ -5,7 +5,7 @@
 @tailwind variants;
 
 .base-container {
-  @apply min-h-screen h-full flex bg-dark2 text-light2 px-12 pt-12;
+  @apply min-h-screen h-full flex bg-dark2 text-light2 pt-12;
 }
 
 .helper-text {
@@ -46,7 +46,8 @@ li.list-marker {
 }
 
 .authorized-page-container {
-  margin-left: 60px;
+  margin-left: 100px;
+  margin-right: 20px;
 }
 
 .menu-expanded-width {

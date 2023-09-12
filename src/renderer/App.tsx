@@ -2,7 +2,7 @@ import {MemoryRouter as Router} from 'react-router-dom';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import './App.css';
 import React, {useEffect} from 'react';
-import * as Sentry from '@sentry/electron';
+import * as Sentry from '@sentry/electron/renderer';
 import {configuredStore} from './store';
 import usePreferencesLoader from './hooks/preferencesLoader';
 import RecordingLocalManager from './backend/RecordingLocalManager';
