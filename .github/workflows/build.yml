@@ -33,6 +33,7 @@ jobs:
           API_KEY_ISSUER_ID: ${{ secrets.mac_notarizing_api_issuer_id }}
           APPLE_ID: ${{ secrets.mac_notarizing_apple_id }}
           APPLE_ID_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
