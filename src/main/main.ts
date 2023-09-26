@@ -13,6 +13,7 @@ import {app, BrowserWindow, shell, ipcMain, protocol} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import * as Sentry from '@sentry/electron/main';
+import {IPCMode} from '@sentry/electron/main';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import subscribeMainListeners from '../utils/mainListeners';
@@ -20,6 +21,7 @@ import {setWindowForIpc} from './services/ipcCommunicationMain';
 
 Sentry.init({
   dsn: 'https://e3d32ad930b7730eee863df272c57bd1@o244219.ingest.sentry.io/4505759397052416',
+  ipcMode: IPCMode.Both,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -54,17 +56,6 @@ if (isDebug) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('electron-debug')();
 }
-
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'fbx',
-    privileges: {
-      standard: true,
-      secure: true,
-      supportFetchAPI: true,
-    },
-  },
-]);
 
 const installExtensions = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
