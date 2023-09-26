@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -26,8 +26,23 @@ jobs:
           mkdir -p ~/private_keys/
           echo '${{ secrets.mac_notarizing_api_key }}' > ~/private_keys/AuthKey_${{ secrets.mac_notarizing_api_key_id }}.p8
 
+      - name: Download CodeSign tool
+        if: startsWith(matrix.os, 'win')
+        run: |
+          Invoke-WebRequest -Uri 'https://www.ssl.com/download/codesigntool-for-windows/' -OutFile './codesign.zip'
+
+      - name: Extract CodeSign tool
+        if: startsWith(matrix.os, 'win')
+        run: |
+          Expand-Archive -Path './codesign.zip' -DestinationPath '.'
+
+      - name: Output contents of current directory
+        if: startsWith(matrix.os, 'win')
+        run: |
+          Get-ChildItem -Path . | ForEach-Object { Write-Output $_.FullName }
+
       - name: Build/release Electron app
-        uses: byplay-io/action-electron-builder@3df89262a2c8f0fa914603b60cd4092e761a2260
+        uses: byplay-io/action-electron-builder@7320511a3ee6f8e832efed08a109fbfa94dad573
         env:
           API_KEY_ID: ${{ secrets.mac_notarizing_api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.mac_notarizing_api_issuer_id }}
