@@ -42,7 +42,7 @@ jobs:
           Get-ChildItem -Path . | ForEach-Object { Write-Output $_.FullName }
 
       - name: Build/release Electron app
-        uses: byplay-io/action-electron-builder@7320511a3ee6f8e832efed08a109fbfa94dad573
+        uses: byplay-io/action-electron-builder@f013676f86fad0d8c7bd3abc4f7d26ead5f28ed4
         env:
           API_KEY_ID: ${{ secrets.mac_notarizing_api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.mac_notarizing_api_issuer_id }}
@@ -50,6 +50,11 @@ jobs:
           APPLE_ID_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
         with:
+          windows_sign_user_name: {{secrets.windows_sign_user_name}}
+          windows_sign_user_password: {{secrets.windows_sign_user_password}}
+          windows_sign_credential_id: {{secrets.windows_sign_credential_id}}
+          windows_sign_user_totp: {{secrets.windows_sign_user_totp}}
+
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
