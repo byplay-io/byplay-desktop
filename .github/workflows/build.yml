@@ -50,10 +50,10 @@ jobs:
           APPLE_ID_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.mac_notarizing_apple_id_password }}
         with:
-          windows_sign_user_name: {{secrets.windows_sign_user_name}}
-          windows_sign_user_password: {{secrets.windows_sign_user_password}}
-          windows_sign_credential_id: {{secrets.windows_sign_credential_id}}
-          windows_sign_user_totp: {{secrets.windows_sign_user_totp}}
+          windows_sign_user_name: ${{secrets.windows_sign_user_name}}
+          windows_sign_user_password: ${{secrets.windows_sign_user_password}}
+          windows_sign_credential_id: ${{secrets.windows_sign_credential_id}}
+          windows_sign_user_totp: ${{secrets.windows_sign_user_totp}}
 
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
