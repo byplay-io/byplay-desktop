@@ -12,9 +12,9 @@ exports.default = async function notarizeMacos(context) {
     return;
   }
 
-  if (!('APPLE_API_KEY_ID' in process.env)) {
+  if (!('APPLE_APP_SPECIFIC_PASSWORD' in process.env)) {
     console.warn(
-      'Skipping notarizing step. APPLE_API_KEY_ID env variable and more (see notarize.js) must be set'
+      'Skipping notarizing step. APPLE_APP_SPECIFIC_PASSWORD env variable and more (see notarize.js) must be set'
     );
     return;
   }
@@ -24,8 +24,8 @@ exports.default = async function notarizeMacos(context) {
   await notarize({
     tool: 'notarytool',
     appPath: `${appOutDir}/${appName}.app`,
-    appleApiKey:    process.env.APPLE_API_KEY,
-    appleApiKeyId:  process.env.APPLE_API_KEY_ID,
-    appleApiIssuer: process.env.APPLE_API_KEY_ISSUER_ID,
+    appleId:         process.env.APPLE_ID,
+    appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD,
+    teamId:          process.env.APPLE_TEAM_ID,
   });
 };
