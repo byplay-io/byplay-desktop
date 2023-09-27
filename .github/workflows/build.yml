@@ -42,7 +42,7 @@ jobs:
           Get-ChildItem -Path . | ForEach-Object { Write-Output $_.FullName }
 
       - name: Build/release Electron app
-        uses: byplay-io/action-electron-builder@f013676f86fad0d8c7bd3abc4f7d26ead5f28ed4
+        uses: byplay-io/action-electron-builder@9120fd340db1f293bc74ba92251056a0c77fe652
         env:
           API_KEY_ID: ${{ secrets.mac_notarizing_api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.mac_notarizing_api_issuer_id }}
