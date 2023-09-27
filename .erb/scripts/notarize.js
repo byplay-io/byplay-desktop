@@ -27,6 +27,5 @@ exports.default = async function notarizeMacos(context) {
     appleApiKey:    process.env.APPLE_API_KEY,
     appleApiKeyId:  process.env.APPLE_API_KEY_ID,
     appleApiIssuer: process.env.APPLE_API_KEY_ISSUER_ID,
-    teamId:         process.env.APPLE_TEAM_ID,
   });
 };
