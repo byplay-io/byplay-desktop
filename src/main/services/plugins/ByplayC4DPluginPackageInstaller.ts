@@ -56,6 +56,14 @@ export default class ByplayC4DPluginPackageInstaller extends ByplayPluginPackage
     return path.join(pluginDir, this.fileName);
   }
 
+  static ensureDirExists(dir: string) {
+    if (!fs.existsSync(dir)) {
+      log.info('Creating plugin dir', dir);
+      fs.mkdirSync(dir);
+    }
+    return dir;
+  }
+
   async expandC4DPluginsDirs(maxonPath: string): Promise<string[]> {
     if (!fs.existsSync(maxonPath)) {
       return [];
@@ -63,7 +71,8 @@ export default class ByplayC4DPluginPackageInstaller extends ByplayPluginPackage
     const dirs = await promises.readdir(maxonPath);
     return dirs
       .filter((dir) => dir.startsWith('Maxon Cinema 4D '))
-      .map((c4dVersion) => path.join(maxonPath, c4dVersion, 'plugins'));
+      .map((c4dVersion) => path.join(maxonPath, c4dVersion, 'plugins'))
+      .map(ByplayC4DPluginPackageInstaller.ensureDirExists);
   }
 
   async listAllC4DDirs() {
