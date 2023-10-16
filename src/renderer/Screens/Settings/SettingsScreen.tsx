@@ -7,6 +7,7 @@ import {SelectRecordingDir} from '../../components/SelectRecordingDir';
 import AuthenticatedPageContainer from '../../components/AuthenticatedPageContainer';
 import Preferences from '../../backend/Preferences';
 import {getAppVersion} from '../../../utils/ipcCommunication';
+import {setEmptyRecordingsDirPath} from '../../state/recordings';
 
 export default function SettingsScreen() {
   const dispatch = useDispatch();
@@ -21,8 +22,13 @@ export default function SettingsScreen() {
   }, [appVersion]);
 
   const signOut = async () => {
+    await Preferences.setBatch({
+      accessToken: null,
+      recordingsDir: null,
+      userId: null,
+    });
     dispatch(setEmptyAccessToken());
-    await Preferences.setBatch({accessToken: null, recordingsDir: null});
+    dispatch(setEmptyRecordingsDirPath());
     navigate(AppRoute.ONBOARDING_AUTHENTICATE);
   };
   return (
