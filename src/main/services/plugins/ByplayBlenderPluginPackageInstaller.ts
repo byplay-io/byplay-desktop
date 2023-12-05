@@ -12,18 +12,10 @@ import ByplayPluginPackageInstaller, {
 
 export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPackageInstaller {
   fileName = 'byplay_blender_addon.py';
-  supportedVersions = [
-    '2.80',
-    '2.81',
-    '2.82',
-    '2.83',
-    '2.84',
-    '2.90',
-    '2.91',
-    '2.92',
-    '2.93',
-    '2.94',
-  ];
+  // eslint-disable-next-line class-methods-use-this
+  subdirMatcher = (dir: string) => dir.match(/^(\d+\.\d+)$/) !== null;
+
+  supportedVersions = [];
 
   async install(): Promise<IPackageInstallStatus> {
     const installedTo: string[] = [];
@@ -78,13 +70,13 @@ export default class ByplayBlenderPluginPackageInstaller extends ByplayPluginPac
   listAllBlenderDirs() {
     const appData = app.getPath('appData');
     const windowsPaths = [
-      path.join(appData, 'Roaming', 'Blender Foundation', 'Blender', '{V}'),
-      path.join(appData, 'Blender Foundation', 'Blender', '{V}'),
+      path.join(appData, 'Roaming', 'Blender Foundation', 'Blender'),
+      path.join(appData, 'Blender Foundation', 'Blender'),
     ];
-    const nixPaths = path.join(appData, 'Blender', '{V}');
+    const nixPaths = path.join(appData, 'Blender');
     return [windowsPaths, nixPaths]
       .flat()
-      .map(this.expandPathsWithVersions)
+      .map(this.expandMatchingSubdirs)
       .flat();
   }
 

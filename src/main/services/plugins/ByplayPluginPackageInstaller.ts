@@ -16,6 +16,7 @@ export default abstract class ByplayPluginPackageInstaller {
   plugin: ByplayPlugin;
   abstract supportedVersions: string[];
   abstract fileName: string;
+  abstract subdirMatcher: (dir: string) => boolean;
 
   constructor(plugin: ByplayPlugin) {
     this.plugin = plugin;
@@ -26,6 +27,17 @@ export default abstract class ByplayPluginPackageInstaller {
     return this.supportedVersions.map((version) =>
       pluginPath.replace('{V}', version),
     );
+  };
+
+  expandMatchingSubdirs = (pluginPath: string): string[] => {
+    if (!fs.existsSync(pluginPath)) {
+      return [];
+    }
+    const contents = fs.readdirSync(pluginPath);
+    console.log('contents', pluginPath, contents);
+    return contents
+      .filter(this.subdirMatcher)
+      .map((dir) => path.join(pluginPath, dir));
   };
 
   static isNotEmptyDir(dir: string) {
@@ -53,7 +65,7 @@ export default abstract class ByplayPluginPackageInstaller {
   }
 
   manualInstallationDocLink() {
-    return `https://byplay.io/docs/plugins/${this.plugin.manifest.id}/manual-installation`;
+    return `https://docs.byplay.io/plugins/${this.plugin.manifest.id}/manual_installation.html`;
   }
 
   makeManualInstallReadme() {

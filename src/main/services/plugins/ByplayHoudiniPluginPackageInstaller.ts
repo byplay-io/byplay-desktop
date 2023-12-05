@@ -10,8 +10,20 @@ import ByplayPluginPackageInstaller, {
 
 export default class ByplayHoudiniPluginPackageInstaller extends ByplayPluginPackageInstaller {
   fileName = 'Byplay-Houdini.json';
-  supportedVersions = ['17.5', '18.0', '18.5', '19.0', '19.5', '20.0', '20.5'];
+  supportedVersions = [
+    '17.5',
+    '18.0',
+    '18.5',
+    '19.0',
+    '19.5',
+    '20.0',
+    '20.5',
+    '21.0',
+    '21.5',
+  ];
 
+  // eslint-disable-next-line class-methods-use-this
+  subdirMatcher = (dir: string) => dir.match(/^(\d+\.\d+)$/) !== null;
   async install(): Promise<IPackageInstallStatus> {
     const installedTo: string[] = [];
     const content = this.makeFileContent();

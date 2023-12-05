@@ -47,7 +47,7 @@ export default async function installPlugin(
     // Analytics.registerUserEvent(AnalyticsUserEventType.PLUGIN_PACKAGE_INSTALLED, {...props.manifest, ...installerResult})
     messages.push(installerResult.message);
     if (installerResult.openDir !== null) {
-      void shell.openExternal(installerResult.openDir);
+      void shell.openPath(installerResult.openDir);
     }
     return {
       success: installerResult.success,

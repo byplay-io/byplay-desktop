@@ -12,6 +12,7 @@ import ByplayPluginPackageInstaller, {
 export default class ByplayC4DPluginPackageInstaller extends ByplayPluginPackageInstaller {
   fileName = 'py-byplay.pyp';
   supportedVersions = ['20', '21', '22', '23', '24', '25'];
+  subdirMatcher = (_dir: string) => true;
 
   async install(): Promise<IPackageInstallStatus> {
     const installedTo: string[] = [];
