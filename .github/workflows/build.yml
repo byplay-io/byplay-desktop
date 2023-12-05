@@ -29,7 +29,7 @@ jobs:
       - name: Download CodeSign tool
         if: startsWith(matrix.os, 'win')
         run: |
-          Invoke-WebRequest -Uri 'https://www.ssl.com/download/codesigntool-for-windows/' -OutFile './codesign.zip'
+          Invoke-WebRequest -Uri 'https://storage.googleapis.com/byplay-website/CodeSignTool-v1.2.7-windows.zip' -OutFile './codesign.zip'
 
       - name: Extract CodeSign tool
         if: startsWith(matrix.os, 'win')
