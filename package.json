@@ -202,7 +202,9 @@
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "gatekeeperAssess": false,
-      "notarize": true
+      "notarize": {
+        "teamId": "F9HX862255"
+      }
     },
     "dmg": {
       "contents": [
